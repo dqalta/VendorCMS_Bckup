@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <!-- Ruta Ejemplo -> MasonryCMS/namespace/action.extension-->
+    <!-- Ruta Ejemplo -> MasonryCMS/masonryAdmin/maintenance/manufacturer.mdk-->
+    <package name="home" namespace="/home" extends="struts-default">
+        <global-results>
+            <result name="error">/error.jsp</result>
+        </global-results>
+        <global-exception-mappings>
+            <exception-mapping exception="java.lang.Exception" result="error" />
+        </global-exception-mappings>      
+       <action name="home" class="web.home.Home">
+            <result name="input">/home/main.jsp</result>
+            <result name="success">/home/main.jsp</result>
+        </action>      
+       
+    </package>
+    
+</struts>
