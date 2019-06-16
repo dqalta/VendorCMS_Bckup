@@ -17,10 +17,12 @@
 .movit{
     padding-left:  200px;
 }
-    
+.nv{
+    border: 0px;
+}    
  
 </style>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default nv">
   <div class="container-fluid main">
     <ul class="nav navbar-nav movit">
         <li class="active "><a href="#"><i class="glyphicon glyphicon glyphicon glyphicon-home"></i></a>  </li>

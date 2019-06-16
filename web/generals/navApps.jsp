@@ -30,6 +30,9 @@
      }
       .cfsearch{
         min-height: auto;
+        display:flex;
+        justify-content: center;
+        vertical-align: middle;
      }
      /*form classes*/
      .pers{
@@ -41,7 +44,7 @@
         vertical-align: middle;  
         border: 0;
         border-color:transparent;
-        margin: auto auto auto auto;
+        margin: 0px auto auto auto;
      }
      /*buttom classes*/
      .btn-apps{
@@ -54,6 +57,10 @@
              vertical-align: middle;  
              margin-top: 30px;
  }
+ @media (min-width: 768px){
+    .navbar-form .input-group>.form-control {
+    width: 400px;
+}}
   
 </style>
 
