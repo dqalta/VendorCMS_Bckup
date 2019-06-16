@@ -15,10 +15,38 @@
         <st:include value="/generals/css-js-Head.jsp" />
         <st:include value="/generals/css-js-Bootstrap.jsp"/>
         <st:include value="/generals/css-js-app.jsp"/>
+        <st:include value="/generals/css-js-Jquery.jsp"/>
+       
+        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Vendor's Admin Area</title>
     </head>
-    <body>
-        <h1>Hello World!</h1>
+    <body style="margin: 0px;">
+        <st:if test="%{sesionActiva == true}">     
+            <st:include value="/generals/navApps.jsp" /> 
+            <st:include value="/generals/mainmenu.jsp" /> 
+            <div>
+                <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+               <br>
+            </div>
+            
+            <st:include value="/generals/navBarFooter2.jsp" /> 
+
+        </st:if>
+         <st:else>
+                <st:include value="/generals/permiso.jsp" />
+            </st:else>        
+        <st:else>
+            <%response.sendRedirect("/VendorCMS/");%>
+        </st:else> 
+   
     </body>
 </html>

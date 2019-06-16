@@ -5,7 +5,7 @@
         <!--BASE DE DATOS-->
 <!--        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/masonry</property>-->
-            <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://3.15.28.209:3306/MasonryDesk_Dev</property>
         <property name="connection.username">developer</property>
         <property name="connection.password">admin</property>

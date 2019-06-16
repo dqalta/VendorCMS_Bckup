@@ -5,7 +5,7 @@ and open the template in the editor.
 -->
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN" "http://struts.apache.org/dtds/struts-2.3.dtd">
 <struts>
-    <package name="sesion" extends="struts-default">
+        <package name="sesion" extends="struts-default">
         <global-results>
             <result name="error">/error.jsp</result>
         </global-results>
@@ -15,9 +15,9 @@ and open the template in the editor.
         </global-exception-mappings>
         
         <action name="iniciar" class="web.sesion.Iniciar">
-            <result name="input">/home/main.jsp</result>
-            <result name="success" type="redirect">/home/main.mdk</result>
-            <result name="error">/main.jsp</result>
+            <result name="input">/intro.jsp</result>
+            <result name="success" type="redirect">/home/home.vdk</result>
+            <result name="error">/intro.jsp</result>
         </action>
         
         <action name="home" class="web.home.Home">

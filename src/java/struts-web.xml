@@ -7,18 +7,17 @@ and open the template in the editor.
 <struts>
     <!-- Ruta Ejemplo -> MasonryCMS/namespace/action.extension-->
     <!-- Ruta Ejemplo -> MasonryCMS/masonryAdmin/maintenance/manufacturer.mdk-->
-    <package name="home" namespace="/home" extends="struts-default">
+    <package name="masonryVendor" namespace="/vendorAdmin/" extends="struts-default">
         <global-results>
             <result name="error">/error.jsp</result>
         </global-results>
         <global-exception-mappings>
             <exception-mapping exception="java.lang.Exception" result="error" />
         </global-exception-mappings>      
-       <action name="home" class="web.home.Home">
+<!--        <action name="home" class="web.home.Home">
             <result name="input">/home/main.jsp</result>
             <result name="success">/home/main.jsp</result>
-        </action>      
-       
+        </action>            -->
     </package>
     
 </struts>

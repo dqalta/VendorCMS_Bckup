@@ -7,7 +7,7 @@ and open the template in the editor.
 <struts>
     <constant name="struts.devMode" value="true" />
     <constant name="struts.configuration.xml.reload" value="true" />
-    <constant name="struts.action.extension" value="mdk" />
+    <constant name="struts.action.extension" value="vdk" />
     <constant name="struts.ui.theme" value="simple" />
     <constant name="struts.multipart.maxSize" value="104857600" />
     <constant name="struts.ognl.allowStaticMethodAccess" value="true"/>

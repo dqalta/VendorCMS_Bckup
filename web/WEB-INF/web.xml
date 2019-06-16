@@ -27,6 +27,6 @@ and open the template in the editor.
     </listener>-->
   
     <welcome-file-list>
-        <welcome-file>/home/main.jsp</welcome-file>
+        <welcome-file>intro.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
