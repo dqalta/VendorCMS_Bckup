@@ -30,8 +30,10 @@ public class Home extends ActionSupport implements SessionAware {
         if (session.get("en-sesion") != null) {
             sesionActiva = true;
             usuario = String.valueOf(session.get("user"));
+    //        System.out.println("algo pasa bueno");
         } else {
             sesionActiva = false;
+     //       System.out.println("algo pasa");
         }
     }
 

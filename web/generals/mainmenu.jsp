@@ -16,6 +16,7 @@
 }
 .movit{
     padding-left:  200px;
+    
 }
 .nv{
     border: 0px;
@@ -29,8 +30,8 @@
       <li><a href="#">My products</a></li>
       <li><a href="#">Orders</a></li>
       <li><a href="#">Inventory</a></li>
-      <li><a href="#">Shipping Roles</a></li>
-      <li><a href="#">Shipping zones</a></li>      
+      <li><a href="/VendorCMS/vendorAdmin/roles.vdk">Shipping Roles</a></li>
+      <li><a href="/VendorCMS/vendorAdmin/shipping.vdk">Shipping zones</a></li>      
     </ul>
   </div>
 </nav>

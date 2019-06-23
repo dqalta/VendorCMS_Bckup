@@ -54,7 +54,9 @@ display: -webkit-inline-box;
     height: 30px;
     width: 40px;
     padding: auto 4px auto 4px;
-    margin: auto 4px auto 4px;
+    margin: 2px  4px auto 4px;
+    border-radius: 5px;
+
 }
 
 </style>
