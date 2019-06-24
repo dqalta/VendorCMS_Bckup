@@ -14,10 +14,15 @@ and open the template in the editor.
             <exception-mapping exception="java.lang.Exception" result="error" />
         </global-exception-mappings>
         
-        <action name="iniciar" class="web.sesion.Iniciar">
+        <action name="start" class="web.session.Start">
             <result name="input">/intro.jsp</result>
             <result name="success" type="redirect">/home/home.vdk</result>
             <result name="error">/intro.jsp</result>
+        </action>
+          <action name="register" class="web.session.Register">
+            <result name="input">/register.jsp</result>
+            <result name="success" type="redirect">/home/home.vdk</result>
+            <result name="error">/register.jsp</result>
         </action>
         
         <action name="home" class="web.home.Home">

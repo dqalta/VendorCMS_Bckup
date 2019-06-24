@@ -1,0 +1,122 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package sql.vendorScreen.maintenance;
+
+import java.io.Serializable;
+
+import java.util.Date;
+
+/**
+ *
+ * @author CR104978
+ */
+/*This java file defines every constructor to be used as a DTO from an object*/
+public class DtoShipping implements Serializable {
+
+    private int id;
+    private int idPostalCode;
+    private int idVendor;
+    private float costPerUnit;    
+    private Date created;
+    private String createdBy;
+    private Date modified;
+    private String modifiedBy;
+    private Boolean active;
+
+    public DtoShipping() {
+    }
+
+   
+    public int getId() {
+        return id;
+    }
+
+    
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    
+    public int getIdPostalCode() {
+        return idPostalCode;
+    }
+
+   
+    public void setIdPostalCode(int idPostalCode) {
+        this.idPostalCode = idPostalCode;
+    }
+
+ 
+    public int getIdVendor() {
+        return idVendor;
+    }
+
+
+    public void setIdVendor(int idVendor) {
+        this.idVendor = idVendor;
+    }
+
+    
+    public float getCostPerUnit() {
+        return costPerUnit;
+    }
+
+    
+    public void setCostPerUnit(float costPerUnit) {
+        this.costPerUnit = costPerUnit;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+   
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getModified() {
+        return modified;
+    }
+
+    public void setModified(Date modified) {
+        this.modified = modified;
+    }
+
+ 
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+   
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+
+    public Boolean getActive() {
+        return active;
+    }
+
+  
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+   
+  
+  
+
+}

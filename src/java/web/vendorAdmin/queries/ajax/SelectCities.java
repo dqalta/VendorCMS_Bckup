@@ -14,7 +14,7 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.Session;
-import web.sesion.ORMUtil;
+import web.session.ORMUtil;
 import web.util.CombosMaintenance;
 import web.util.KeyCombosString;
 

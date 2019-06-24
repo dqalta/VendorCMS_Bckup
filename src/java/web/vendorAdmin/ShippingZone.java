@@ -14,10 +14,12 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import sql.vendorScreen.maintenance.DtoShipping;
 import sql.vendorScreen.maintenance.DtoShippingZone;
 import sql.vendorScreen.maintenance.MaintenanceSQL;
 import util.Fechas;
-import web.sesion.ORMUtil;
+import util.Numeros;
+import web.session.ORMUtil;
 import web.util.CombosMaintenance;
 import web.util.KeyCombos;
 import web.util.KeyCombosString;
@@ -275,11 +277,10 @@ public class ShippingZone extends ActionSupport implements SessionAware {
     public void process() {
         switch (accion) {
             case 1:
-                save();
-                break;
-            case 2:
                 readForUpdate();
+//                save();
                 break;
+         
         }
         
     }
@@ -303,27 +304,29 @@ public class ShippingZone extends ActionSupport implements SessionAware {
   //shippingZones = MaintenanceSQL.getFilteredShippingZones(vdk, city);
     }
 
-//    public boolean validateFields() {
-//        boolean flag = true;
-//        mensajes = "";
-//        mensaje = false;
-//        //VALIDAR QUE CAMPOS NO SEAN BLANCOS NI NULOS
-//        if ((pname == null) || (pname.isEmpty())) {
-//            mensajes = mensajes + "danger<>Error<>Please complete field 'Description'.|";
-//            flag = false;
-//        }
-//        if (!flag) {
-//            mensaje = flag;
-//        }
-//        return flag;
-//    }
+    public boolean validateFields() {
+        boolean flag = true;
+        mensajes = "";
+        mensaje = false;
+        //VALIDAR QUE CAMPOS NO SEAN BLANCOS NI NULOS
+        if ((idPostalCode == 0)) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'IdPostalCode'.|";
+            flag = false;
+        }
+          if ((costPerUnit == 0)) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'Cost Per Unit'.|";
+            flag = false;
+        }
+        if (!flag) {
+            mensaje = flag;
+        }
+        return flag;
+    }
 
     public void save() {
-//        if (getIdEdit() == 0) {
-//            insert();
-//        } else {
-//            update();
-//        }
+ 
+            insert();
+   
     }
 
     public void chargePostalZones() {
@@ -334,41 +337,42 @@ public class ShippingZone extends ActionSupport implements SessionAware {
     }
 
     public void insert() {
-//        if (validateFields()) {//Valido los campos del formulario
-//            Transaction tn = null;//Inicializo la transacción de la BD en null
-//            try {
-//                tn = mdk.beginTransaction();//Inicializo la transacción de la DB 
-//
-//                DtoCollection m = new DtoCollection();//Creo un objeto del tipo Manufacturer
-//
-//                //Seteo los datos del objeto excepto el id por que es Auto Incremental
-//                m.setDescription(pname);
-//
-//                m.setCreated(Fechas.ya());
-//                m.setCreatedBy(usuario);
-//                m.setModified(Fechas.ya());
-//                m.setModifiedBy(usuario);
-//                m.setActive(isActive());//Lo puse en true porque se me olvidó crear el check en el formulario, en la noche hacemos eso jajaja
-//
-//                MaintenanceSQL.saveCollection(mdk, m);
-//                //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
-//
-//                tn.commit();// Hago Commit a la transacción para guardar el registro
-//                clearFields();
-//                mensajes = mensajes + "info<>Information<>Collection saved successfully.";
-//                mensaje = true;
-//
-//            } catch (HibernateException x) {
-//                //AdmConsultas.error(o2c, x.getMessage());
-//                // mensajes = mensajes + "danger<>Error<>Error al guardar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
-//                mensajes = mensajes + "danger<>Error<>Error.|";
-//                mensaje = true;
-//                if (tn != null) {//Si hay error y el transacción es distinto de null, es porque la transacción existe, entoncs hago rollback
-//                    tn.rollback();
-//                }
-//            }
-//            mensaje = true;
-//        }
+        if (validateFields()) {//Valido los campos del formulario
+            Transaction tn = null;//Inicializo la transacción de la BD en null
+            try {
+                tn = vdk.beginTransaction();//Inicializo la transacción de la DB 
+
+                DtoShipping m = new DtoShipping();//Creo un objeto del tipo Manufacturer
+
+                //Seteo los datos del objeto excepto el id por que es Auto Incremental
+                m.setIdPostalCode(idPostalCode);
+                m.setIdVendor(Numeros.entero(idVendor));
+                m.setCostPerUnit(costPerUnit);
+                m.setCreated(Fechas.ya());
+                m.setCreatedBy(usuario);
+                m.setModified(Fechas.ya());
+                m.setModifiedBy(usuario);
+                m.setActive(isActive());//Lo puse en true porque se me olvidó crear el check en el formulario, en la noche hacemos eso jajaja
+
+                MaintenanceSQL.saveShipping(vdk, m);
+                //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
+
+                tn.commit();// Hago Commit a la transacción para guardar el registro
+                clearFields();
+                mensajes = mensajes + "info<>Information<>Shipping Code saved successfully.";
+                mensaje = true;
+
+            } catch (HibernateException x) {
+                //AdmConsultas.error(o2c, x.getMessage());
+                // mensajes = mensajes + "danger<>Error<>Error al guardar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
+                mensajes = mensajes + "danger<>Error<>Error.|";
+                mensaje = true;
+                if (tn != null) {//Si hay error y el transacción es distinto de null, es porque la transacción existe, entoncs hago rollback
+                    tn.rollback();
+                }
+            }
+            mensaje = true;
+        }
     }
 
     public void update() {
@@ -408,15 +412,22 @@ public class ShippingZone extends ActionSupport implements SessionAware {
     }
 
     public void readForUpdate() {
-//        DtoShippingZone m = MaintenanceSQL.getShippingZone(vdk, getIdEdit());
-//        if (m != null) {
+         System.out.println("vendedor"+ idVendor);
+                        System.out.println("postalCode"+ idPostalCode);
+                                    System.out.println("costo"+ costPerUnit);
+
+        DtoShipping m = MaintenanceSQL.getShippingZone(vdk, idPostalCode);
+        if (m != null) {
 //            setIdEdit(m.getId());
 //            pname = m.getDescription();
 //            setActive(m.getActive());
-//        } else {
+        } else {
+           
+
+            save();
 //            mensajes = mensajes + "danger<>Error<>Collection does not exist.";
 //            mensaje = true;
-//        }
+        }
   }
 
  

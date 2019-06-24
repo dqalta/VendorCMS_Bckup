@@ -6,12 +6,15 @@
 var accion, permiso, mensaje, mensajes;
 $(document).ready(function () {
     accion = parseInt($("#accion").val());
+      
+
     permiso = $("#permiso").val();
     mensaje = $("#mensaje").val();
     mensajes = $("#mensajes").val();
     if (permiso === "true") {
         scroll();
         dataTable("table_codes");
+        
     }
     if (mensaje === "true") {
         mostrarNotificaciones();
@@ -20,47 +23,55 @@ $(document).ready(function () {
   //  chargeChecks();
    // chargeCheckBoxes();
 });
-/*
-function chargeCheckBoxes() {
-    var arr = ["active"];
-    for (var i = 0; i < arr.length; i++) {
-        if ($("#" + arr[i]).val() === "true") {
-            $("#check_" + arr[i]).lcs_on();
-        } else {
-            $("#check_" + arr[i]).lcs_off();
-        }
-    }
-}
-
-function chargeChecks() {
-    $(".lcc").lc_switch('Yes', 'No');
-    $('body').delegate('.lcc', 'lcs-statuschange', function () {
-        var status = ($(this).is(':checked')) ? true : false;
-        var id = $(this).attr("id");
-        $("#" + id.replace("check_", "")).val(status);
-    });
-}
-
-function cancel() {
-    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
-    window.location = "/MasonryCMS/masonryAdmin/maintenance/manufacturer.mdk";
-}
-
-function save() {
-    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
-    $("#accion").val(1);
-    $("#formulario").submit();
-}
 
 
+
+///*
+//function chargeCheckBoxes() {
+//    var arr = ["active"];
+//    for (var i = 0; i < arr.length; i++) {
+//        if ($("#" + arr[i]).val() === "true") {
+//            $("#check_" + arr[i]).lcs_on();
+//        } else {
+//            $("#check_" + arr[i]).lcs_off();
+//        }
+//    }
+//}
+//
+//function chargeChecks() {
+//    $(".lcc").lc_switch('Yes', 'No');
+//    $('body').delegate('.lcc', 'lcs-statuschange', function () {
+//        var status = ($(this).is(':checked')) ? true : false;
+//        var id = $(this).attr("id");
+//        $("#" + id.replace("check_", "")).val(status);
+//    });
+//}
+//
+//function cancel() {
+//    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
+//    window.location = "/MasonryCMS/masonryAdmin/maintenance/manufacturer.mdk";
+//}
+//
+//function save() {
+//    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
+//    $("#accion").val(1);
+//    $("#formulario").submit();
+//}
+//
+//
 function edit(id) {
     $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
     $("#idEdit").val(id);
     $("#accion").val(2);
     $("#formulario").submit();
 }
-*/
 
+function save() {
+
+    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
+    $("#accion").val(1);
+    $("#formulario").submit();
+}
 function dataTable(id) {
     $("#" + id).DataTable({
         "sPaginationType": "full_numbers",

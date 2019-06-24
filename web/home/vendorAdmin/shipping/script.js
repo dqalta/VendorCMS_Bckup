@@ -8,7 +8,7 @@ $(document).ready(function () {
     
 
 ///
-    accion = parseInt($("#accion").val());
+     accion = parseInt($("#accion").val());
     permiso = $("#permiso").val();
     mensaje = $("#mensaje").val();
     mensajes = $("#mensajes").val();
@@ -101,11 +101,6 @@ function cancel() {
     window.location = "/MasonryCMS/masonryAdmin/maintenance/manufacturer.mdk";
 }
 
-function save() {
-    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
-    $("#accion").val(1);
-    $("#formulario").submit();
-}
 
 
 function edit(id) {
@@ -115,7 +110,13 @@ function edit(id) {
     $("#formulario").submit();
 }
 */
-
+//saves the data 
+function save() {
+  
+    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
+    $("#accion").val(1);
+    $("#formulario").submit();
+}
 function dataTable(id) {
     $("#" + id).DataTable({
         "sPaginationType": "full_numbers",

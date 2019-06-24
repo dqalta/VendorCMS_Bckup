@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.Session;
-import web.sesion.ORMUtil;
+import web.session.ORMUtil;
 
 /**
  *

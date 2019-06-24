@@ -43,7 +43,7 @@
                 <st:param name="title">Postal Codes to delivery</st:param>
             </st:include>
             <%--   <st:if test="%{permiso == true}"> --%>
-            <st:form id="formulario" name="formulario" cssClass="form-vertical" action="shippingZone" method="post" theme="bootstrap">  
+            <st:form id="formulario" name="formulario" cssClass="form-vertical" action="shipping" method="post" theme="bootstrap">  
 
                 <div  class="table-responsive codesZ">
                     <table id="table_codes" class="table table-striped" style="width:100%; margin: 0px auto;">
@@ -69,13 +69,13 @@
                                             <st:if test="%{#shippingZones.active == true}">
                                                 <!--<i class="glyphicon glyphicon-off text-success" data-toggle="tooltip" data-placement="top" title="" data-original-title="Active"</i>-->
                                                 <st:checkbox id="active" name="active" value="%{#shippingZones.active}"/>
-                                                <input type="checkbox" name="active" value="%{#shippingZones.active}"  id="active" />
+                                                <input  id="active" type="checkbox" name="active" value="%{#shippingZones.active}"  onChange="save()"/>
 
                                             </st:if>
                                             <st:else>
                                                 <st:checkbox  id="active" name="active" value="%{#shippingZones.active}"/>
 
-                                                <input type="checkbox" name="active" value="%{#shippingZones.active}"  id="active" >
+                                                <input type="checkbox"  id="active"  name="active" value="%{#shippingZones.active}" onChange="save();"/>
 
 
 
@@ -86,7 +86,7 @@
                                         <td>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>   
-                                                <st:textfield value = "%{shippingZones.costPerunit}" class="form-control" placeholder="Price"/>                                                
+                                                <st:textfield  name="costPerUnit" id="costPerUnit" value = "%{shippingZones.costPerunit}" class="form-control" placeholder="Price"/>                                                
                                             </div>
 
                                         </td>    

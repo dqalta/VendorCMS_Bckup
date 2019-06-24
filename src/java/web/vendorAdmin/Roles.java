@@ -14,10 +14,11 @@ import org.apache.struts2.interceptor.SessionAware;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import sql.vendorScreen.maintenance.DtoRoles;
 import sql.vendorScreen.maintenance.DtoShippingZone;
 import sql.vendorScreen.maintenance.MaintenanceSQL;
 import util.Fechas;
-import web.sesion.ORMUtil;
+import web.session.ORMUtil;
 import web.util.CombosMaintenance;
 import web.util.KeyCombos;
 
@@ -31,7 +32,7 @@ public class Roles extends ActionSupport implements SessionAware {
     Map session;//Variable que guarda la sesión del Tomcat
 
     // Variables del Hibernate-ORM
-    Session mdk; //Variable de la conexión a la base de datos
+    Session vdk; //Variable de la conexión a la base de datos
 
     //Variables del Controlador Struts2 Servidor<->JSP
     //Variables de validaciones
@@ -42,29 +43,29 @@ public class Roles extends ActionSupport implements SessionAware {
     String menu;//String de los permisos del menu 
     String mensajes = "";//Variable para cargar el texto del resultado de las validaciones o acciones
     boolean mensaje;//Variable bandera para saber si se muestra o no el mensaje
-
+    int idEdit;
     //Variables de la pantalla
-    private ArrayList<DtoShippingZone> shippingZones = new ArrayList<>();//Variable con la lista de datos
-
+    private ArrayList<DtoRoles> roles = new ArrayList<>();//Variable con la lista de datos
 
     //Variables del mantenimiento
     private int id;
-    private int idPostalCode;
-    private String idVendor;
-    private float costPerUnit;    
+    private int idVendor;
+    private float minValue;
+    private boolean freeShipping;
+    private float additionalCost;
+    private float flatRate;
+    private float skidDeposit;
     private boolean active;
-    private int idCode;
-    private int idEdit;
 
     public Roles() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         if (session.get("en-sesion") != null) {
             sesionActiva = true;
-            mdk = ORMUtil.getSesionCMS().openSession();
+            vdk = ORMUtil.getSesionCMS().openSession();
             usuario = String.valueOf(session.get("user"));
             permiso = true; //AdmConsultas.getPermiso(o2c, "ADMINISTRACIÓN", "Encargados", usuario);            
             menu = "";//AdmConsultas.menuUsuario(o2c, usuario);
-           // chargeSelect(); // fill the select with the categories
+            // chargeSelect(); // fill the select with the categories
         } else {
             sesionActiva = false;
         }
@@ -137,124 +138,86 @@ public class Roles extends ActionSupport implements SessionAware {
     }
 
     //SET GET CUSTUMIZED
- 
-/**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the idPostalCode
-     */
-    public int getIdPostalCode() {
-        return idPostalCode;
-    }
-
-    /**
-     * @param idPostalCode the idPostalCode to set
-     */
-    public void setIdPostalCode(int idPostalCode) {
-        this.idPostalCode = idPostalCode;
-    }
-
-    /**
-     * @return the idVendor
-     */
-    public String getIdVendor() {
+    public int getIdVendor() {
         return idVendor;
     }
 
-    /**
-     * @param idVendor the idVendor to set
-     */
-    public void setIdVendor(String idVendor) {
+    public void setIdVendor(int idVendor) {
         this.idVendor = idVendor;
     }
 
-    /**
-     * @return the costPerUnit
-     */
-    public float getCostPerUnit() {
-        return costPerUnit;
+    public float getMinValue() {
+        return minValue;
     }
 
-    /**
-     * @param costPerUnit the costPerUnit to set
-     */
-    public void setCostPerUnit(float costPerUnit) {
-        this.costPerUnit = costPerUnit;
+    public void setMinValue(float minValue) {
+        this.minValue = minValue;
     }
 
-    /**
-     * @return the active
-     */
-    public boolean isActive() {
-        return active;
+    public boolean isFreeShipping() {
+        return freeShipping;
     }
 
-    /**
-     * @param active the active to set
-     */
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setFreeShipping(boolean freeShipping) {
+        this.freeShipping = freeShipping;
     }
 
-    /**
-     * @return the idEdit
-     */
+    public float getAdditionalCost() {
+        return additionalCost;
+    }
+
+    public void setAdditionalCost(float additionalCost) {
+        this.additionalCost = additionalCost;
+    }
+
+    public float getFlatRate() {
+        return flatRate;
+    }
+
+    public void setFlatRate(float flatRate) {
+        this.flatRate = flatRate;
+    }
+
+    public ArrayList<DtoRoles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(ArrayList<DtoRoles> roles) {
+        this.roles = roles;
+    }
+
+    public float getSkidDeposit() {
+        return skidDeposit;
+    }
+
+    public void setSkidDeposit(float skidDeposit) {
+        this.skidDeposit = skidDeposit;
+    }
+
+   
     public int getIdEdit() {
         return idEdit;
     }
 
-    /**
-     * @param idEdit the idEdit to set
-     */
+  
     public void setIdEdit(int idEdit) {
         this.idEdit = idEdit;
     }
-      
-    
-    /**
-     * @return the idCode
-     */
-    public int getIdCode() {
-        return idCode;
-    }
-
-    /**
-     * @param idCode the idCode to set
-     */
-    public void setIdCode(int idCode) {
-        this.idCode = idCode;
-    }
-
-
-    public ArrayList<DtoShippingZone> getShippingZones() {
-        return shippingZones;
-    }
-
-    public void setShippingZones(ArrayList<DtoShippingZone> shippingZones) {
-        this.shippingZones = shippingZones;
-    }
-
-    
     //// Class structure and logical 
-    
     @Override
-    
+
     public String execute() {
         if (permiso == true) {
             process();
-            mdk.close();//Cerrar la conexión de la base de datos SIEMPRE
+            vdk.close();//Cerrar la conexión de la base de datos SIEMPRE
         }
         return SUCCESS;
     }
@@ -269,21 +232,21 @@ public class Roles extends ActionSupport implements SessionAware {
                 readForUpdate();
                 break;
         }
-       // chargePostalZones();
+        // chargePostalZones();
     }
 
     public void clearFields() {
-        setId(0);
-        accion = 0;
-        setIdEdit(0);
-        setActive(false);
+//        setId(0);
+//        accion = 0;
+//        setIdEdit(0);
+//        setActive(false);
     }
 
     public void chargeSelect() {
 //        shippingZones = CombosMaintenance.getShippingZones(mdk);
 //        textures = CombosMaintenance.getTextures(mdk);
 //        packageTypes = CombosMaintenance.getPackageTypes(mdk);
- 
+
     }
 
 //    public boolean validateFields() {
@@ -300,105 +263,113 @@ public class Roles extends ActionSupport implements SessionAware {
 //        }
 //        return flag;
 //    }
-
     public void save() {
-//        if (getIdEdit() == 0) {
-//            insert();
-//        } else {
-//            update();
-//        }
-    }
-
-    public void chargePostalZones() {
-    //    shippingZones = MaintenanceSQL.getShippingZones(mdk, city);
+        
+        if (getIdEdit() == 0) {
+            insert();
+        } else {
+            update();
+        }
     }
 
     public void insert() {
-//        if (validateFields()) {//Valido los campos del formulario
-//            Transaction tn = null;//Inicializo la transacción de la BD en null
-//            try {
-//                tn = mdk.beginTransaction();//Inicializo la transacción de la DB 
-//
-//                DtoCollection m = new DtoCollection();//Creo un objeto del tipo Manufacturer
-//
-//                //Seteo los datos del objeto excepto el id por que es Auto Incremental
-//                m.setDescription(pname);
-//
-//                m.setCreated(Fechas.ya());
-//                m.setCreatedBy(usuario);
-//                m.setModified(Fechas.ya());
-//                m.setModifiedBy(usuario);
-//                m.setActive(isActive());//Lo puse en true porque se me olvidó crear el check en el formulario, en la noche hacemos eso jajaja
-//
-//                MaintenanceSQL.saveCollection(mdk, m);
-//                //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
-//
-//                tn.commit();// Hago Commit a la transacción para guardar el registro
-//                clearFields();
-//                mensajes = mensajes + "info<>Information<>Collection saved successfully.";
-//                mensaje = true;
-//
-//            } catch (HibernateException x) {
-//                //AdmConsultas.error(o2c, x.getMessage());
-//                // mensajes = mensajes + "danger<>Error<>Error al guardar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
-//                mensajes = mensajes + "danger<>Error<>Error.|";
-//                mensaje = true;
-//                if (tn != null) {//Si hay error y el transacción es distinto de null, es porque la transacción existe, entoncs hago rollback
-//                    tn.rollback();
-//                }
-//            }
-//            mensaje = true;
-//        }
+        //  if (validateFields()) {//Valido los campos del formulario
+        Transaction tn = null;//Inicializo la transacción de la BD en null
+        try {
+            tn = vdk.beginTransaction();//Inicializo la transacción de la DB 
+         
+            DtoRoles m = new DtoRoles();//Creo un objeto del tipo Manufacturer
+
+            //Seteo los datos del objeto excepto el id por que es Auto Incremental
+            m.setIdVendor(idVendor);
+            m.setMinValue(minValue);
+            m.setFreeShipping(freeShipping);
+            m.setAdditionalCost(additionalCost);
+            m.setFlatRate(flatRate);
+            m.setSkidDeposit(skidDeposit);
+            m.setCreated(Fechas.ya());
+            m.setCreatedBy(usuario);
+            m.setModified(Fechas.ya());
+            m.setModifiedBy(usuario);
+            m.setActive(active);//Lo puse en true porque se me olvidó crear el check en el formulario, en la noche hacemos eso jajaja
+
+            MaintenanceSQL.saveShippingRol(vdk, m);
+            //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
+
+            tn.commit();// Hago Commit a la transacción para guardar el registro
+            clearFields();
+            mensajes = mensajes + "info<>Information<>Collection saved successfully.";
+            mensaje = true;
+
+        } catch (HibernateException x) {
+            //AdmConsultas.error(o2c, x.getMessage());
+            // mensajes = mensajes + "danger<>Error<>Error al guardar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
+            mensajes = mensajes + "danger<>Error<>Error.|";
+            mensaje = true;
+            if (tn != null) {//Si hay error y el transacción es distinto de null, es porque la transacción existe, entoncs hago rollback
+                tn.rollback();
+            }
+        }
+        mensaje = true;
+        //}
     }
 
     public void update() {
-//        if (validateFields()) {
-//            Transaction tn = null;
-//            try {
-//                tn = mdk.beginTransaction();
-//                DtoCollection m = MaintenanceSQL.getCollection(mdk, getIdEdit());
-//                if (m != null) {
-//
-//                    m.setDescription(pname);
-//                    m.setModified(Fechas.ya());
-//                    m.setModifiedBy(usuario);
-//                    m.setActive(isActive());//Lo puse en true porque se me olvidó crear el check en el formulario, en la noche hacemos eso jajaja
-//
-//                    MaintenanceSQL.updateCollection(mdk, m);
-//                    // AdmConsultas.bitacora(o2c, usuario, "Encargado modificado Tipo: " + tipo + ", Codigo: " + codigo);
-//
-//                    tn.commit();
-//                    clearFields();
-//                    mensajes = mensajes + "info<>Information<>Collection modified successfully.";
-//                    mensaje = true;
-//                } else {
-//                    insert();
-//                }
-//            } catch (HibernateException x) {
-//                //AdmConsultas.error(o2c, x.getMessage());
-//                // mensajes = mensajes + "danger<>Error<>Error al modificar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
-//                mensajes = mensajes + "danger<>Error<>Error.|";
-//                mensaje = true;
-//                if (tn != null) {
-//                    tn.rollback();
-//                }
-//            }
-//            mensaje = true;
-//        }
+        // if (validateFields()) {
+        Transaction tn = null;
+        try {
+            tn = vdk.beginTransaction();
+            DtoRoles m = MaintenanceSQL.getRole(vdk, getIdEdit());
+            if (m != null) {
+                m.setIdVendor(idVendor);
+                m.setMinValue(minValue);
+                m.setFreeShipping(freeShipping);
+                m.setAdditionalCost(additionalCost);
+                m.setFlatRate(flatRate);
+                m.setSkidDeposit(skidDeposit);
+                m.setModified(Fechas.ya());
+                m.setModifiedBy(usuario);
+                m.setActive(active);//Lo puse en true porque se me olvidó crear el check en el formulario, en la noche hacemos eso jajaja
+
+                MaintenanceSQL.updateRole(vdk, m);
+                // AdmConsultas.bitacora(o2c, usuario, "Encargado modificado Tipo: " + tipo + ", Codigo: " + codigo);
+
+                tn.commit();
+                clearFields();
+                mensajes = mensajes + "info<>Information<>Shipping costs  modified successfully.";
+                mensaje = true;
+            } else {
+                insert();
+            }
+        } catch (HibernateException x) {
+            //AdmConsultas.error(o2c, x.getMessage());
+            // mensajes = mensajes + "danger<>Error<>Error al modificar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
+            mensajes = mensajes + "danger<>Error<>Error.|";
+            mensaje = true;
+            if (tn != null) {
+                tn.rollback();
+            }
+        }
+        mensaje = true;
+        //   }
     }
 
     public void readForUpdate() {
-//        DtoShippingZone m = MaintenanceSQL.getShippingZone(mdk, getIdEdit());
-//        if (m != null) {
-//            setIdEdit(m.getId());
-//            pname = m.getDescription();
-//            setActive(m.getActive());
-//        } else {
-//            mensajes = mensajes + "danger<>Error<>Collection does not exist.";
-//            mensaje = true;
-//        }
-  }
+        DtoRoles m = MaintenanceSQL.getRole(vdk, getIdEdit());
+        if (m != null) {
+            setIdEdit(m.getId());
+            
+            minValue = m.getMinValue();
+            freeShipping = m.isFreeShipping();
+            flatRate= m.getFlatRate();
+            additionalCost = m.getAdditionalCost();
+            skidDeposit= m.getSkidDeposit();
+            active = m.getActive();
+        } else {
+            mensajes = mensajes + "danger<>Error<>Collection does not exist.";
+            mensaje = true;
+        }
+    }
 
-    
 
 }
