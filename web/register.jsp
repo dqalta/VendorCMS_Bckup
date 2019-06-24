@@ -14,7 +14,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <st:include value="/generals/css-js-Jquery.jsp"/>
+      
            <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
         
    
@@ -27,6 +27,7 @@
         <link rel="stylesheet" href="/VendorCMS/home/js/register/css/style.css">
         <title>Create a vendor account</title>
     </head>
+    <body>
     <st:form id="frm" name="frm" action="register" method="post" cssClass="form-horizontal">
         <div class="main">
 
@@ -73,4 +74,6 @@
             <st:actionmessage />            
         </div>
     </st:form> 
+   <st:include value="/generals/css-js-Jquery.jsp"/>
+        </body>
 </html>
