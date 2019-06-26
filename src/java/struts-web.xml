@@ -23,6 +23,14 @@ and open the template in the editor.
             <result name="input">/home/vendorAdmin/roles/intro.jsp</result>
             <result name="success">/home/vendorAdmin/roles/intro.jsp</result>
         </action>  
+           <action name="rols" class="web.vendorAdmin.admin.Rol">
+            <result name="input">/home/vendorAdmin/admin/rol/intro.jsp</result>
+            <result name="success">/home/vendorAdmin/admin/rol/intro.jsp</result>
+        </action> 
+         <action name="users" class="web.vendorAdmin.admin.User">
+            <result name="input">/home/vendorAdmin/admin/user/intro.jsp</result>
+            <result name="success">/home/vendorAdmin/admin/user/intro.jsp</result>
+        </action> 
 <!--        </action>  
              <action name="gallery" class="web.masonryAdmin.maintenance.Gallery">
              <result name="input">/home/masonryAdmin/maintenance/gallery/intro.jsp</result>

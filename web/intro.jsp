@@ -1,4 +1,4 @@
-<%-- 
+    <%-- 
     Document   : intro
     Created on : 15/06/2019, 12:34:42 PM
     Author     : developer
@@ -11,7 +11,7 @@
 <html>
     <head>
         <st:include value="/generals/css-js-Jquery.jsp"/>
-           <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
+        <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
         <!-- Font Icon -->
         <link rel="stylesheet" href="/VendorCMS/home/js/register/fonts/material-icon/css/material-design-iconic-font.min.css">
 
@@ -19,10 +19,12 @@
         <link rel="stylesheet" href="/VendorCMS/home/js/register/css/style.css">
         <title>Login Area</title>
     </head>
+    <body>
     <st:form id="frm" name="frm" action="start" method="post" cssClass="form-horizontal">
         <div style="text-align: center; color:#666666;">  
             <div> <br></div>
-            <h3 style="color:white">Vendor CMS - Masonry Supply<br>C.M.S</h3>                
+            <!--            <h3 style="color:white">Vendor CMS - Masonry Supply<br>C.M.S</h3> -->
+
         </div>
         <br>
         <div class="main">
@@ -31,6 +33,9 @@
                 <div class="container">
                     <div class="signup-content">
                         <form method="POST" id="signup-form" class="signup-form">
+                          
+                            <!--<img src="/VendorCMS/home/img/logo.png" high="200px" width="250px" class="form-input"   >-->
+                          
                             <h2 class="form-title"> Login page</h2>
                             <div class="form-group">
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -46,8 +51,9 @@
                             </div>
                             <div class="row">
 
-                                <div class="btn-group pull-right">                                 
-                                    <a class="btn btn-danger modifi pull-right " href="/VendorCMS/register.jsp" ><i class="glyphicon glyphicon-ok"></i>&nbsp;Create an account</a>
+                                <div class="btn-group pull-right">       
+                                 
+                                    <a class="btn btn-danger modifi pull-right " class="btn btn-danger modifi pull-right"  href="/VendorCMS/register.jsp" ><i class="glyphicon glyphicon-ok"></i>&nbsp;Create an account</a>
                                 </div>
                             </div>  
                         </form>
@@ -63,12 +69,13 @@
 
             <br>
         </div>
-      
+
         <div style="text-align: left; color:#e6e6e6;">
             <st:fielderror />
             <st:actionerror />
-            <st:actionmessage />            
+            <st:actionmessage />   
+            <st:include value="/generals/css-js-Jquery.jsp"/>
         </div>
     </st:form> 
-
+</body>
 </html>

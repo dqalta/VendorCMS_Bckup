@@ -18,7 +18,7 @@
            <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
         
    
-        <title>Sign Up Form by Colorlib</title>
+        <title>Sign Up Vendor Masonry Store</title>
 
         <!-- Font Icon -->
         <link rel="stylesheet" href="/VendorCMS/home/js/register/fonts/material-icon/css/material-design-iconic-font.min.css">
