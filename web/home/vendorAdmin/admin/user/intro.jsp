@@ -44,7 +44,7 @@
                 <br>
             <st:if test="%{permiso == true}"> 
 
-                <st:form id="formulario" name="formulario" cssClass="form-vertical" action="user" method="post" theme="bootstrap">                                        
+                <st:form id="formulario" name="formulario" cssClass="form-vertical" action="users" method="post" theme="bootstrap">                                        
                     <st:hidden id="accion" name="accion" value="%{accion}"/>
                     <st:hidden id="idEdit" name="idEdit" value="%{idEdit}"/>
                     <div class="panel-group vendor">
@@ -79,7 +79,7 @@
                                                         </div>
                                                     </div>   
                                                 </div>
-
+                                                            <%--
                                                 <div class="row">
                                                     <div class="col-sm-2"> 
                                                         <label><strong>Modules:</strong></label>
@@ -91,12 +91,10 @@
                                                         <label><st:checkbox theme="simple" class="check_" value="%{menuAdmin}" id="menuAdmin" name="menuAdmin"/>&nbsp;Administration</label>
                                                     </div>    
                                                     <div class="col-sm-3"> 
-                                                        <label><st:checkbox theme="simple" class="check_" value="%{menuProdAdmin}" id="menuProdAdmin" name="menuProdAdmin"/>&nbsp;Product Administration</label>
+                                                        <label><st:checkbox theme="simple" class="check_" value="%{menuProdAdmin}" id="menuProdAdmin" name="menuProdAdmin"/>&nbsp;Products & Orders</label>
                                                     </div>  
-                                                    <div class="col-sm-3"> 
-                                                        <label><st:checkbox theme="simple" class="check_" value="%{menuProdComp}" id="menuProdComp" name="menuProdComp"/>&nbsp;Product Components</label>
-                                                    </div>     
-                                                </div> 
+                                                      
+</div> --%>
                                                 <br>
                                                 <div class="row">
                                                     <div class="col-sm-12">
@@ -109,7 +107,7 @@
                                                 <br>
 
                                                 <div class="btn-group pull-right">
-                                                    <a class="btn btn-warning" onclick="save();"><i class="glyphicon glyphicon-ok"></i>&nbsp;Save</a>
+                                                    <a class="btn btn-warning" onclick="saveVendorUser();"><i class="glyphicon glyphicon-ok"></i>&nbsp;Save</a>
                                                     <a class="btn btn-default" onclick="cancel();"><i class="glyphicon glyphicon-remove"></i>&nbsp;Cancel</a>
                                                 </div>  
                                             </div>
@@ -125,6 +123,7 @@
                     <table id="table_users" class="table table-striped" style="width:100%; margin: 0px auto;">
                         <thead>
                             <tr>
+                                   <th>Id</th>
                                 <th>Code</th>
                                 <th>Email</th>
                                 <th>NickName</th>
@@ -140,7 +139,8 @@
                             <st:if test="%{!getUsers().isEmpty()}">
                                 <st:iterator value="users" var="users" status="index">
                                     <tr>
-                                        <td><st:property value="%{#users.code}" /></td>   
+                                        <td><st:property value="%{#users.id}" /></td>   
+                                        <td><st:property value="%{#users.codeVendorUser}" /></td>   
                                         <td><st:property value="%{#users.email}" /></td>           
                                         <td><st:property value="%{#users.nickname}" /></td>        
                                         <td><st:date name="%{#users.created}" format="dd/MM/yyyy"/></td>       

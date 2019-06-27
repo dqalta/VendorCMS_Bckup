@@ -16,14 +16,26 @@ public class AdminSQL {
 
     public static void saveRol(Session vdk, DtoRol m) {
         vdk.createNativeQuery("INSERT INTO vendorRol"
-                + " (description, created, createdBy, modified, modifiedBy)"
+                + " (description, created, createdBy, modified, modifiedBy,idVendor)"
                 + " VALUES"
-                + " (:description, :created, :createdBy, :modified, :modifiedBy)")
+                + " (:description, :created, :createdBy, :modified, :modifiedBy, :idVendor)")
                 .setParameter("description", m.getDescription())
                 .setParameter("created", m.getCreated())
                 .setParameter("createdBy", m.getCreatedBy())
                 .setParameter("modified", m.getModified())
                 .setParameter("modifiedBy", m.getModifiedBy())
+                .setParameter("idVendor", m.getModifiedBy())
+                .executeUpdate();
+    }
+
+    public static void saveVendorUserRol(Session vdk, String code, int id, String idVendor) {
+        vdk.createNativeQuery("INSERT INTO vendorUserRol"
+                + " (idVendorRol, codeVendorUser, idVendor)"
+                + " VALUES"
+                + " (:idVendorRol, :codeVendorUser, :idVendor)")
+                .setParameter("idVendorRol", id)
+                .setParameter("codeVendorUser", code)
+                   .setParameter("idVendor", idVendor)
                 .executeUpdate();
     }
 
@@ -34,16 +46,30 @@ public class AdminSQL {
                 .executeUpdate();
     }
 
-    public static void saveUser(Session vdk, DtoRol m) {
-        vdk.createNativeQuery("INSERT INTO masonryUser"
-                + " (code, nickName, fullName, email, password, menuAdmin, menuProdAdmin, menuProdComp, created, createdBy, modified, modifiedBy, active, status)"
+    public static void deleteUserRols(Session vdk, String code) {
+        vdk.createNativeQuery("DELETE FROM vendorUserRol"
+                + " WHERE codeVendorUser = :codeVendorUser")
+                .setParameter("codeVendorUser", code)
+                .executeUpdate();
+    }
+
+    public static void saveVendorUser(Session vdk, DtoVendorUser m) {
+        vdk.createNativeQuery("INSERT INTO vendorUser"
+                + " (codeVendorUser, nickName, fullName, email, passwordVendorUser, idVendor, created, createdBy, modified, modifiedBy, active, statusVendorUser)"
                 + " VALUES"
-                + " (:code, :nickName, :fullName, :email, :password, :menuAdmin, :menuProdAdmin, :menuProdComp, :created, :createdBy, :modified, :modifiedBy, :active, :status)")
-                .setParameter("code", m.getDescription())
-                .setParameter("nickName", m.getCreated())
+                + " (:codeVendorUser, :nickName, :fullName, :email, :passwordVendorUser, :idVendor, :created, :createdBy, :modified, :modifiedBy, :active, :statusVendorUser)")
+                .setParameter("codeVendorUser", m.getCodeVendorUser())
+                .setParameter("nickName", m.getNickName())
+                .setParameter("fullName", m.getFullName())
+                .setParameter("email", m.getEmail())
+                .setParameter("passwordVendorUser", m.getPasswordVendorUser())
+                .setParameter("idVendor", m.getIdVendor())
+                .setParameter("created", m.getCreated())
                 .setParameter("createdBy", m.getCreatedBy())
                 .setParameter("modified", m.getModified())
                 .setParameter("modifiedBy", m.getModifiedBy())
+                .setParameter("active", m.isActive())
+                .setParameter("statusVendorUser", m.getStatusVendorUser())
                 .executeUpdate();
     }
 
@@ -61,59 +87,55 @@ public class AdminSQL {
         return consecutive;
     }
 
-    public static DtoUser getUser(Session vdk, String code) {
+    public static DtoVendorUser getUser(Session vdk, String code) {
         Iterator itr = vdk.createNativeQuery("SELECT"
                 + " id,"
-                + " code,"
+                + " codeVendorUser,"
                 + " nickName,"
                 + " fullName,"
                 + " email,"
-                + " password,"
-                + " menuAdmin,"
-                + " menuProdAdmin,"
-                + " menuProdComp,"
+                + " passwordVendorUser,"
+                + " idVendor,"
                 + " created,"
                 + " createdBy,"
                 + " modified,"
                 + " modifiedBy,"
                 + " active,"
-                + " status"
-                + " FROM masonryUser"
-                + " WHERE code = :code")
-                .setParameter("code", code)
-                .setResultTransformer(Transformers.aliasToBean(DtoUser.class))
+                + " statusVendorUser"
+                + " FROM vendorUser"
+                + " WHERE codeVendorUser = :codeVendorUser")
+                .setParameter("codeVendorUser", code)
+                .setResultTransformer(Transformers.aliasToBean(DtoVendorUser.class))
                 .list().iterator();
-        DtoUser m = null;
+        DtoVendorUser m = null;
         while (itr.hasNext()) {
-            m = (DtoUser) itr.next();
+            m = (DtoVendorUser) itr.next();
         }
         return m;
     }
 
-    public static ArrayList<DtoUser> getUsers(Session vdk) {
-        ArrayList<DtoUser> a = new ArrayList<>();
+    public static ArrayList<DtoVendorUser> getUsers(Session vdk) {
+        ArrayList<DtoVendorUser> a = new ArrayList<>();
         Iterator itr = vdk.createNativeQuery("SELECT"
                 + " id,"
-                + " code,"
+                + " codeVendorUser,"
                 + " nickName,"
                 + " fullName,"
                 + " email,"
-                + " password,"
-                + " menuAdmin,"
-                + " menuProdAdmin,"
-                + " menuProdComp,"
+                + " passwordVendorUser,"
+                + " idVendor,"
                 + " created,"
                 + " createdBy,"
                 + " modified,"
                 + " modifiedBy,"
                 + " active,"
-                + " status"
+                + " statusVendorUser"
                 + " FROM vendorUser")
-                .setResultTransformer(Transformers.aliasToBean(DtoUser.class))
+                .setResultTransformer(Transformers.aliasToBean(DtoVendorUser.class))
                 .list().iterator();
 
         while (itr.hasNext()) {
-            a.add((DtoUser) itr.next());
+            a.add((DtoVendorUser) itr.next());
         }
         return a;
     }
@@ -127,6 +149,7 @@ public class AdminSQL {
                 + " createdBy,"
                 + " modified,"
                 + " modifiedBy"
+                + " idVendor"
                 + " FROM vendorRol")
                 .setResultTransformer(Transformers.aliasToBean(DtoRol.class))
                 .list().iterator();
@@ -145,6 +168,7 @@ public class AdminSQL {
                 + " createdBy,"
                 + " modified,"
                 + " modifiedBy"
+                + " idVendor"
                 + " FROM vendorRol"
                 + " WHERE id = :id")
                 .setParameter("id", id)
@@ -170,12 +194,12 @@ public class AdminSQL {
         return result;
     }
 
-    public static void saveRolDetail(Session vdk, int idVendorRol, String module, String description, boolean permission, String user, Date ya) {
+    public static void saveRolDetail(Session vdk, int idVendorRol, String module, String description, boolean permission, String user, Date ya, String idVendor) {
         if (permission) {
             vdk.createNativeQuery("INSERT INTO vendorRolDetail"
-                    + " (idVendorRol, module, description, permission, created, createdBy, modified, modifiedBy)"
+                    + " (idVendorRol, module, description, permission, created, createdBy, modified, modifiedBy, idVendor)"
                     + " VALUES"
-                    + " (:idVendorRol, :module, :description, :permission, :created, :createdBy, :modified, :modifiedBy)")
+                    + " (:idVendorRol, :module, :description, :permission, :created, :createdBy, :modified, :modifiedBy, :idVendor)")
                     .setParameter("idVendorRol", idVendorRol)
                     .setParameter("module", module)
                     .setParameter("description", description)
@@ -184,6 +208,7 @@ public class AdminSQL {
                     .setParameter("createdBy", user)
                     .setParameter("modified", ya)
                     .setParameter("modifiedBy", user)
+                    .setParameter("idVendor", idVendor)
                     .executeUpdate();
         }
     }
@@ -200,7 +225,38 @@ public class AdminSQL {
                 .setParameter("modifiedBy", m.getModifiedBy())
                 .executeUpdate();
     }
-     public static boolean getRolDetail(Session vdk, int idVendorRol, String module, String description) {
+
+    public static void updateUser(Session vdk, DtoVendorUser m) {
+        vdk.createNativeQuery("UPDATE vendorUser SET"
+                + " codeVendorUser = :codeVendorUser,"
+                + " nickName = :nickName,"
+                + " fullName = :fullName,"
+                + " email = :email,"
+                + " passwordVendorUser = :passwordVendorUser,"
+                + " idVendor = :idVendor,"
+//                + " menuAdmin = :menuAdmin,"
+//                + " menuProdAdmin = :menuProdAdmin,"
+                + " modified = :modified,"
+                + " modifiedBy = :modifiedBy"
+                + " active = :active"
+                + " statusVendorUser = :statusVendorUser"
+                + " WHERE id = :id")
+                .setParameter("codeVendorUser", m.getCodeVendorUser())
+                .setParameter("nickName", m.getNickName())
+                .setParameter("fullName", m.getFullName())
+                .setParameter("email", m.getEmail())
+                .setParameter("passwordVendorUser", m.getPasswordVendorUser())
+                .setParameter("idVendor", m.getIdVendor())
+//                .setParameter("menuAdmin", m.isMenuAdmin())
+//                .setParameter("menuProdAdmin", m.isMenuProdAdmin())
+                .setParameter("modified", m.getModified())
+                .setParameter("modifiedBy", m.getModifiedBy())
+                .setParameter("active", m.isActive())
+                .setParameter("statusVendorUser", m.getStatusVendorUser())
+                .executeUpdate();
+    }
+
+    public static boolean getRolDetail(Session vdk, int idVendorRol, String module, String description) {
         boolean permiso = false;
         Iterator itr = vdk.createSQLQuery("SELECT permission"
                 + " FROM vendorRolDetail"
@@ -214,5 +270,21 @@ public class AdminSQL {
             permiso = (Boolean) itr.next();
         }
         return permiso;
+    }
+
+        public static String getVendorUserRols(Session vdk, String code, String idVendorRole) {
+        String resultado = "";
+        Iterator itr = vdk.createSQLQuery("SELECT id"
+                + " FROM vendorUserRol"
+                + " WHERE codeVendorUser = :codeVendorUser"
+                + " AND idVendor = :idVendor")
+                .setParameter("codeVendorUser", code)
+                .setParameter("idVendor", idVendorRole)
+                .list().iterator();
+
+        while (itr.hasNext()) {
+            resultado = resultado.concat("," + (int) itr.next());
+        }
+        return resultado;
     }
 }

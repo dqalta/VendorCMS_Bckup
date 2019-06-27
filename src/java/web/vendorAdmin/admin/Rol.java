@@ -40,6 +40,7 @@ public class Rol extends ActionSupport implements SessionAware {
     boolean sesionActiva = true; //Guardo el estado de la sesión del usuario en el tomcat
     boolean permiso;//Guardo si tiene o no permiso de ingresar a la pantalla 
     String usuario;//Código del usuario logueado
+    String idVendor;
     String menu;//String de los permisos del menu 
     String mensajes = "";//Variable para cargar el texto del resultado de las validaciones o acciones
     boolean mensaje;//Variable bandera para saber si se muestra o no el mensaje
@@ -67,6 +68,7 @@ public class Rol extends ActionSupport implements SessionAware {
             sesionActiva = true;
             vdk = ORMUtil.getSesionCMS().openSession();
             usuario = String.valueOf(session.get("user"));
+            idVendor = String.valueOf(session.get("idVendor"));
             permiso = true; //AdmConsultas.getPermiso(o2c, "ADMINISTRACIÓN", "Encargados", usuario);            
             menu = "";//AdmConsultas.menuUsuario(o2c, usuario);
         } else {
@@ -310,7 +312,7 @@ public class Rol extends ActionSupport implements SessionAware {
                 m.setCreatedBy(usuario);
                 m.setModified(Fechas.ya());
                 m.setModifiedBy(usuario);
-
+                m.setIdVendor(idVendor);
                 AdminSQL.saveRol(vdk, m);
                 //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
 
@@ -342,16 +344,16 @@ public class Rol extends ActionSupport implements SessionAware {
             Date ya = Fechas.ya();
 
             //Administration
-            AdminSQL.saveRolDetail(vdk, idRol, "ADMINISTRATION", "user", user, usuario, ya);
-            AdminSQL.saveRolDetail(vdk, idRol, "ADMINISTRATION", "rol", rol, usuario, ya);
-            AdminSQL.saveRolDetail(vdk, idRol, "ADMINISTRATION", "audit", audit, usuario, ya);
+            AdminSQL.saveRolDetail(vdk, idRol, "ADMINISTRATION", "user", user, usuario, ya, idVendor);
+            AdminSQL.saveRolDetail(vdk, idRol, "ADMINISTRATION", "rol", rol, usuario, ya, idVendor);
+            AdminSQL.saveRolDetail(vdk, idRol, "ADMINISTRATION", "audit", audit, usuario, ya, idVendor);
 
             //VendorStructure
-            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "My products", myProducts, usuario, ya);
-            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Shipping Rules", shippingRules, usuario, ya);
-            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Shipping Codes", shippingCodes, usuario, ya);
-            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Orders", orders, usuario, ya);
-            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Inventory", inventory, usuario, ya);
+            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "My products", myProducts, usuario, ya, idVendor);
+            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Shipping Rules", shippingRules, usuario, ya, idVendor);
+            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Shipping Codes", shippingCodes, usuario, ya, idVendor);
+            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Orders", orders, usuario, ya,idVendor);
+            AdminSQL.saveRolDetail(vdk, idRol, "PRODUCST&ORDERS", "Inventory", inventory, usuario, ya, idVendor);
 
             tn.commit();
         } catch (HibernateException x) {
@@ -375,6 +377,7 @@ public class Rol extends ActionSupport implements SessionAware {
                     m.setDescription(getDescription());
                     m.setModified(Fechas.ya());
                     m.setModifiedBy(usuario);
+                    m.setIdVendor(idVendor);
 
                     AdminSQL.updateRol(vdk, m);
                     // AdmConsultas.bitacora(o2c, usuario, "Encargado modificado Tipo: " + tipo + ", Codigo: " + codigo);

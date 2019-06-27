@@ -11,7 +11,7 @@ $(document).ready(function () {
     mensajes = $("#mensajes").val();
     if (permiso === "true") {
         scroll();
-        dataTable("table_rols");
+        dataTable("table_users");
         $("#rol").chosen({width: "100%"});
     }
     if (mensaje === "true") {
@@ -44,10 +44,10 @@ function cargarCheckBoxes() {
 }
 function cancel() {
     $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
-    window.location = "/MasonryCMS/masonryAdmin/admin/user.mdk";
+    window.location = "/VendorCMS/vendorAdmin/admin/user.mdk";
 }
 
-function save() {
+function saveVendorUser() {
     $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
     $("#accion").val(1);
     $("#formulario").submit();

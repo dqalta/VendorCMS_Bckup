@@ -17,7 +17,7 @@
         <st:include value="/generals/css-js-Icheck.jsp"/>
         <script src="/VendorCMS/home/vendorAdmin/admin/rol/script.js" type="text/javascript"></script>   
         <style>
-              .rules{
+            .rules{
                 margin-left: 200px !important; 
                 margin-right: 200px !important;
             }
@@ -25,7 +25,7 @@
                 margin-left: 180px !important;
                 margin-right: 180px !important;
             }
-            </style>
+        </style>
     </head>
     <body style="margin: 0px;">
         <st:if test="%{sesionActiva == true}">        
@@ -34,10 +34,10 @@
             <st:hidden id="mensajes" name="mensajes" value="%{mensajes}" />
             <st:include value="/generals/navApps.jsp" /> 
             <st:include value="/generals/mainmenu.jsp" />
-                <st:param name="title">ROLS</st:param>
-            <br>
-            <br>
-            <br>
+            <st:param name="title">ROLS</st:param>
+                <br>
+                <br>
+                <br>
             <st:if test="%{permiso == true}"> 
 
                 <st:form id="formulario" name="formulario" cssClass="form-vertical" action="rols" method="post" theme="bootstrap">                                        
@@ -71,7 +71,7 @@
                                                 <br>
                                                 <div class="row">
                                                     <div class="col-sm-2"> 
-                                                     <label><strong>Administration&nbsp;</strong></label>
+                                                        <label><strong>Administration&nbsp;</strong></label>
                                                     </div>   
                                                 </div>
                                                 <hr>
@@ -90,7 +90,7 @@
                                                     </div>   
                                                 </div> 
                                                 <br>
-                                                
+
                                                 <div class="row">
                                                     <div class="col-sm-2"> 
                                                         <label><strong>Products  & Orders &nbsp;</strong></label>
@@ -113,20 +113,14 @@
                                                     <div class="col-sm-2"> 
                                                         <label><st:checkbox theme="simple"  value="%{shippingRules}" id="shippingRules" name="shippingRules"/>&nbsp;Shipping Roles</label>
                                                     </div> 
-                                                     <div class="col-sm-2"> 
+                                                    <div class="col-sm-2"> 
                                                         <label><st:checkbox theme="simple"  value="%{shippingCodes}" id="shippingCodes" name="shippingCodes"/>&nbsp;Shipping Zones</label>
                                                     </div> 
                                                 </div>   
-                                                <br>  
-                                               
-                                                <div class="row">
-                                                    <div class="col-sm-2"> 
-                                                        <label><strong>Product Administration&nbsp;</strong></label>
-                                                    </div>   
-                                                </div>
+                                                <br>                                                                                                 
                                                 <hr>  
-                                                         <br>
-                                               
+                                                <br>
+
                                                 <br>
 
                                                 <br>  
@@ -188,7 +182,7 @@
                 <st:include value="/generals/permiso.jsp" />
             </st:else>
 
-                <%--   <st:include value="/generals/navBarFooter.jsp" /> --%>
+            <%--   <st:include value="/generals/navBarFooter.jsp" /> --%>
         </st:if>
         <st:else>
             <%response.sendRedirect("/VendorCMS/");%>

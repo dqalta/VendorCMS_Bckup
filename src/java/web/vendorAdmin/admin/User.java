@@ -21,7 +21,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import sql.vendorScreen.admin.AdminSQL;
 import sql.vendorScreen.admin.DtoRol;
-import sql.vendorScreen.admin.DtoUser;
+import sql.vendorScreen.admin.DtoVendorUser;
+import sql.vendorScreen.admin.DtoUserRol;
 //import sql.vendorAdmin.maintenance.DtoCollection;
 import util.Fechas;
 import util.Generales;
@@ -40,7 +41,7 @@ public class User extends ActionSupport implements SessionAware {
     Map session;//Variable que guarda la sesión del Tomcat
 
     // Variables del Hibernate-ORM
-    Session mdk; //Variable de la conexión a la base de datos
+    Session vdk; //Variable de la conexión a la base de datos
 
     //Variables del Controlador Struts2 Servidor<->JSP
     //Variables de validaciones
@@ -48,16 +49,19 @@ public class User extends ActionSupport implements SessionAware {
     boolean sesionActiva = true; //Guardo el estado de la sesión del usuario en el tomcat
     boolean permiso;//Guardo si tiene o no permiso de ingresar a la pantalla 
     String usuario;//Código del usuario logueado
+    String idVendor;
     String menu;//String de los permisos del menu 
     String mensajes = "";//Variable para cargar el texto del resultado de las validaciones o acciones
     boolean mensaje;//Variable bandera para saber si se muestra o no el mensaje
 
     //Variables de la pantalla
-    private ArrayList<DtoUser> users = new ArrayList<>();//Variable con la lista de datos
+    private ArrayList<DtoVendorUser> users = new ArrayList<>();//Variable con la lista de datos
+    private ArrayList<DtoUserRol> rols = new ArrayList<>();//Variable con la lista de datos
+
     ArrayList<KeyCombos> roles = new ArrayList<>();
 
     //Variables del mantenimiento
-    String code;
+    String codeVendorUser;
     String fullName;
     String email;
     boolean active;
@@ -65,14 +69,20 @@ public class User extends ActionSupport implements SessionAware {
     int[] rol;
     boolean menuAdmin;
     boolean menuProdAdmin;
-    boolean menuProdComp;
+    //vars of the rols
+    String[] userRol;
+    ArrayList<KeyCombos> userRoles = new ArrayList<>();
+
+    private int id;
+    private int idVendorRol;
 
     public User() {
         Map<String, Object> session = ActionContext.getContext().getSession();
         if (session.get("en-sesion") != null) {
             sesionActiva = true;
-            mdk = ORMUtil.getSesionCMS().openSession();
+            vdk = ORMUtil.getSesionCMS().openSession();
             usuario = String.valueOf(session.get("user"));
+            idVendor = String.valueOf(session.get("idVendor"));
             permiso = true; //AdmConsultas.getPermiso(o2c, "ADMINISTRACIÓN", "Encargados", usuario);            
             menu = "";//AdmConsultas.menuUsuario(o2c, usuario);
             chargeSelect();
@@ -152,12 +162,12 @@ public class User extends ActionSupport implements SessionAware {
     }
 
     //SET GET CUSTUMIZED
-    public String getCode() {
-        return code;
+    public String getCodeVendorUser() {
+        return codeVendorUser;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCode(String codeVendorUser) {
+        this.codeVendorUser = codeVendorUser;
     }
 
     public String getFullName() {
@@ -216,19 +226,27 @@ public class User extends ActionSupport implements SessionAware {
         this.menuProdAdmin = menuProdAdmin;
     }
 
-    public boolean isMenuProdComp() {
-        return menuProdComp;
+    public ArrayList<DtoVendorUser> getUsers() {
+        return users;
     }
 
-    public void setMenuProdComp(boolean menuProdComp) {
-        this.menuProdComp = menuProdComp;
+    public void setUsers(ArrayList<DtoVendorUser> users) {
+        this.users = users;
+    }
+
+    public ArrayList<DtoUserRol> getRols() {
+        return rols;
+    }
+
+    public void setRols(ArrayList<DtoUserRol> rols) {
+        this.rols = rols;
     }
 
     @Override
     public String execute() {
         if (permiso == true) {
             process();
-            mdk.close();//Cerrar la conexión de la base de datos SIEMPRE
+            vdk.close();//Cerrar la conexión de la base de datos SIEMPRE
         }
         return SUCCESS;
     }
@@ -240,26 +258,26 @@ public class User extends ActionSupport implements SessionAware {
                 save();
                 break;
             case 2:
-//                readForUpdate();
+                readForUpdate();
                 break;
         }
         chargeUsers();
     }
 
     public void chargeSelect() {
-        roles = CombosAdmin.roles(mdk);
+        roles = CombosAdmin.roles(vdk);
     }
 
     public void clearFields() {
         accion = 0;
         idEdit = 0;
-        code = "";
+        codeVendorUser = "";
         fullName = "";
         email = "";
         active = true;
         menuAdmin = false;
         menuProdAdmin = false;
-        menuProdComp = false;
+
         chargeSelect();
     }
 
@@ -306,45 +324,44 @@ public class User extends ActionSupport implements SessionAware {
         if (idEdit == 0) {
             insert();
         } else {
-           // update();
+            update();
         }
     }
 
     public void chargeUsers() {
-        users = AdminSQL.getUsers(mdk);
+        users = AdminSQL.getUsers(vdk);
     }
 
     public void insert() {
         if (validateFields()) {//Valido los campos del formulario
             Transaction tn = null;//Inicializo la transacción de la BD en null
             try {
-                tn = mdk.beginTransaction();//Inicializo la transacción de la DB 
+                tn = vdk.beginTransaction();//Inicializo la transacción de la DB 
 
-                DtoUser m = new DtoUser();//Creo un objeto del tipo Manufacturer
+                DtoVendorUser m = new DtoVendorUser();//Creo un objeto del tipo Manufacturer
 
                 String code_ = Generales.generateCode(fullName);
-                code_ = code_ + String.format("%03d", AdminSQL.getConsecutive(mdk, "codeUser"));
-                code = code_;
+                code_ = code_ + String.format("%03d", AdminSQL.getConsecutive(vdk, "codeVendorUser"));
+                codeVendorUser = code_;
 
-                m.setCode(code);
+                m.setCodeVendorUser(codeVendorUser);
                 m.setNickName("");
                 m.setFullName(fullName);
                 m.setEmail(email);
-                m.setPassword("");
-                m.setMenuAdmin(menuAdmin);
-                m.setMenuProdAdmin(menuProdAdmin);
-                m.setMenuProdComp(menuProdComp);
+                m.setPasswordVendorUser("");
+                m.setIdVendor(idVendor);
                 m.setCreated(Fechas.ya());
                 m.setCreatedBy(usuario);
                 m.setModified(Fechas.ya());
                 m.setModifiedBy(usuario);
                 m.setActive(active);
-                m.setStatus("PENDING");
-
-                //AdminSQL.saveUser(mdk, m);
-                //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
-
+                m.setStatusVendorUser("PENDING");
+                //Set id roles by vendor user
+                AdminSQL.saveVendorUser(vdk, m);
                 tn.commit();// Hago Commit a la transacción para guardar el registro
+
+                saveVendorRoles(codeVendorUser);
+
                 clearFields();
                 mensajes = mensajes + "info<>Information<>User saved successfully.";
                 mensaje = true;
@@ -362,7 +379,145 @@ public class User extends ActionSupport implements SessionAware {
         }
     }
 
+    public void saveVendorRoles(String code) {
+        Transaction tn = null;
+        try {
+            tn = vdk.beginTransaction();
+            DtoVendorUser p = AdminSQL.getUser(vdk, code);
+            if (p != null) {
 
-   
+                AdminSQL.deleteUserRols(vdk, code);
+
+                for (int i = 0; i < rol.length; i++) {
+                    AdminSQL.saveVendorUserRol(vdk, code, rol[i], idVendor);
+                }
+                tn.commit();
+            } else {
+                insert();
+            }
+        } catch (HibernateException x) {
+            mensajes = mensajes + "danger<>Error<>Save user isn't possible: " + code + ": " + ExceptionUtils.getMessage(x) + ".";
+            mensaje = true;
+            if (tn != null) {
+                tn.rollback();
+            }
+        }
+    }
+
+    public void readForUpdate() {
+        DtoVendorUser m = AdminSQL.getUser(vdk, codeVendorUser);
+        if (m != null) {
+            idEdit = m.getId();
+            fullName = m.getFullName();
+            email = m.getEmail();
+            active = m.isActive();
+             userRol= AdminSQL.getVendorUserRols(vdk, codeVendorUser, idVendor).split(",");
+        } else {
+            mensajes = mensajes + "danger<>Error<>User doesn't exist";
+            mensaje = true;
+        }
+    }
+
+    public void update() {
+        if (validateFields()) {
+            Transaction tn = null;
+            try {
+                tn = vdk.beginTransaction();
+                DtoVendorUser m = AdminSQL.getUser(vdk, codeVendorUser);
+                if (m != null) {
+
+                    m.setCodeVendorUser(codeVendorUser);
+                    m.setNickName("");
+                    m.setFullName(fullName);
+                    m.setEmail(email);
+                    m.setPasswordVendorUser("");
+                    m.setIdVendor(idVendor);
+//                    m.setMenuAdmin(menuAdmin);
+//                    m.setMenuProdAdmin(menuProdAdmin);
+                    m.setCreated(Fechas.ya());
+                    m.setCreatedBy(usuario);
+                    m.setModified(Fechas.ya());
+                    m.setModifiedBy(usuario);
+                    m.setActive(active);
+                    m.setStatusVendorUser("PENDING");
+
+                    AdminSQL.updateUser(vdk, m);
+                    // AdmConsultas.bitacora(o2c, usuario, "Encargado modificado Tipo: " + tipo + ", Codigo: " + codigo);
+                    tn.commit();
+                    saveVendorRoles(codeVendorUser);
+                    clearFields();
+                    mensajes = mensajes + "info<>Information<>Rol modified successfully.";
+                    mensaje = true;
+                } else {
+                    insert();
+                }
+            } catch (HibernateException x) {
+                //AdmConsultas.error(o2c, x.getMessage());
+                // mensajes = mensajes + "danger<>Error<>Error al modificar encargados: " + codigo + ": " + ExceptionUtils.getMessage(x) + ".";
+                mensajes = mensajes + "danger<>Error<>Error.|";
+                mensaje = true;
+                if (tn != null) {
+                    tn.rollback();
+                }
+            }
+            mensaje = true;
+        }
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the idVendorRol
+     */
+    public int getIdVendorRol() {
+        return idVendorRol;
+    }
+
+    /**
+     * @param idVendorRol the idVendorRol to set
+     */
+    public void setIdVendorRol(int idVendorRol) {
+        this.idVendorRol = idVendorRol;
+    }
+
+    /**
+     * @return the userRol
+     */
+    public String[] getUserRol() {
+        return userRol;
+    }
+
+    /**
+     * @param userRol the userRol to set
+     */
+    public void setUserRol(String[] userRol) {
+        this.userRol = userRol;
+    }
+
+    /**
+     * @return the userRoles
+     */
+    public ArrayList<KeyCombos> getUserRoles() {
+        return userRoles;
+    }
+
+    /**
+     * @param userRoles the userRoles to set
+     */
+    public void setUserRoles(ArrayList<KeyCombos> userRoles) {
+        this.userRoles = userRoles;
+    }
 
 }

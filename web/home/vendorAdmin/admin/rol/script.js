@@ -25,7 +25,7 @@ function chargeChecks() {
 }
 function cancel() {
     $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
-    window.location = "/VendorCMS/vendorAdmin/admin/rol.vdk";
+    window.location = "/VendorCMS/vendorAdmin/admin/rols.vdk";
 }
 
 function saveRol() {

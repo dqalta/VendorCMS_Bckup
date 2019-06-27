@@ -17,9 +17,9 @@ import sql.vendorScreen.admin.DtoRol;
  */
 public class CombosAdmin {
 
-    public static ArrayList<KeyCombos> roles(Session mdk) {
+    public static ArrayList<KeyCombos> roles(Session vdk) {
         ArrayList<KeyCombos> combo = new ArrayList<>();
-        List<DtoRol> roles = AdminSQL.getRols(mdk);
+        List<DtoRol> roles = AdminSQL.getRols(vdk);
         for (DtoRol c : roles) {
             combo.add(new KeyCombos(c.getId(), c.getDescription()));
         }

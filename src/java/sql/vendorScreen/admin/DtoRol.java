@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -19,7 +19,7 @@ public class DtoRol {
     private String createdBy;
     private Date modified;
     private String modifiedBy;
-
+    private String idVendor;
     public DtoRol() {
         
     }
@@ -77,6 +77,16 @@ public class DtoRol {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+ 
+    public String getIdVendor() {
+        return idVendor;
+    }
+
+  
+    public void setIdVendor(String idVendor) {
+        this.idVendor = idVendor;
     }
 
 }

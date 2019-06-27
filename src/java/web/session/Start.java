@@ -107,6 +107,7 @@ public class Start extends ActionSupport implements SessionAware {
             session.put("en-sesion", "true");
             session.put("user", "Daniel");
             session.put("userName", "Danielito");
+             session.put("idVendor", "HDE-001");
             session.put("ip", request.getRemoteHost());
 
             //Lógica para pegar Base de Datos
