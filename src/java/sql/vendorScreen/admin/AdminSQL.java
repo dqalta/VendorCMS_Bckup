@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import sql.vendorScreen.maintenance.DtoVendorRequest;
 import util.Numeros;
 
 /**
@@ -286,5 +287,19 @@ public class AdminSQL {
             resultado = resultado.concat("," + (int) itr.next());
         }
         return resultado;
+    }
+         public static void saveVendorTemp(Session vdk, DtoVendorRequest m) {
+        vdk.createNativeQuery("INSERT INTO vendorRegister"
+                + " (companyName, name, phoneNumber, webSite, city, email, password)"
+                + " VALUES"
+                + " (:companyName, :name, :phoneNumber, :webSite, :city, :email, :password)")
+                .setParameter("companyName", m.getCompanyName())
+                .setParameter("name", m.getName())
+                .setParameter("phoneNumber", m.getPhoneNumber())
+                .setParameter("webSite", m.getWebSite())
+                .setParameter("city", m.getCity())
+                .setParameter("email", m.getEmail())
+                .setParameter("password", m.getPassword())                            
+                .executeUpdate();
     }
 }

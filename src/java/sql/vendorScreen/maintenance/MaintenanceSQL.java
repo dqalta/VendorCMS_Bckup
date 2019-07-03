@@ -103,6 +103,18 @@ public class MaintenanceSQL {
         }
         return a;
     }
+     public static ArrayList<DtoString> getCitiesRegisterV(Session vdk) {
+        ArrayList<DtoString> a = new ArrayList<>();
+        Iterator itr = vdk.createNativeQuery("SELECT distinct city as description"
+                + " FROM postalCode")
+                .setResultTransformer(Transformers.aliasToBean(DtoString.class))
+                .list().iterator();
+
+        while (itr.hasNext()) {
+            a.add((DtoString) itr.next());
+        }
+        return a;
+    }
 
     public static ArrayList<DtoString> getPostalCodes(Session vdk, String city) {
         ArrayList<DtoString> a = new ArrayList<>();

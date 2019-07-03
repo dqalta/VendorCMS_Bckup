@@ -25,7 +25,7 @@ public class CombosMaintenance {
     //class to show the provinces
         public static ArrayList<KeyCombosString> getProvincePostalCodes(Session vdk) {
         ArrayList<KeyCombosString> combo = new ArrayList<>();
-        combo.add(new KeyCombosString("NONE"));
+//        combo.add(new KeyCombosString("NONE"));
         List<DtoString> provincePostalCodes = MaintenanceSQL.getProvincePostalCodes(vdk);
         for (DtoString c : provincePostalCodes) {
             combo.add(new KeyCombosString (c.getDescription()));
@@ -38,6 +38,15 @@ public class CombosMaintenance {
         ArrayList<KeyCombosString> combo = new ArrayList<>();     
         combo.add(new KeyCombosString("NONE"));
         List<DtoString> cities = MaintenanceSQL.getCitiesPostalCodes(vdk, province);
+        for (DtoString c : cities) {
+            combo.add(new KeyCombosString(c.getDescription()));
+        }
+        return combo;
+    }
+        public static ArrayList<KeyCombosString> getCitiesRegister(Session vdk) {
+        ArrayList<KeyCombosString> combo = new ArrayList<>();     
+        combo.add(new KeyCombosString("NONE"));
+        List<DtoString> cities = MaintenanceSQL.getCitiesRegisterV(vdk);
         for (DtoString c : cities) {
             combo.add(new KeyCombosString(c.getDescription()));
         }

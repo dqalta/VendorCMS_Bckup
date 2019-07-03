@@ -72,7 +72,7 @@ public class ShippingZone extends ActionSupport implements SessionAware {
            chargeSelect(); // fill the select with the categories
         } else {
             sesionActiva = false;
-            System.out.println(sesionActiva);
+            
         }
         
     }

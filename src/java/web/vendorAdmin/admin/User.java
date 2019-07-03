@@ -27,6 +27,7 @@ import sql.vendorScreen.admin.DtoUserRol;
 import util.Fechas;
 import util.Generales;
 import util.Numeros;
+import util.UtilSecurity;
 import web.session.ORMUtil;
 import web.util.CombosAdmin;
 import web.util.KeyCombos;
@@ -348,7 +349,7 @@ public class User extends ActionSupport implements SessionAware {
                 m.setNickName("");
                 m.setFullName(fullName);
                 m.setEmail(email);
-                m.setPasswordVendorUser("");
+                m.setPasswordVendorUser(UtilSecurity.encript(UtilSecurity.randomPassword(3, 2, 1, 2)));
                 m.setIdVendor(idVendor);
                 m.setCreated(Fechas.ya());
                 m.setCreatedBy(usuario);

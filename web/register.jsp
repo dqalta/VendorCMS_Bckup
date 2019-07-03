@@ -9,71 +9,121 @@
 <%@ taglib uri="/struts-jquery-tags" prefix="stj"%>
 <%@ taglib uri="/struts-bootstrap-tags" prefix="stb"%>
 <!DOCTYPE html>
-<html>
+<html class="fondoRegister">
     <head>
+        <st:include value="/generals/css-js-Head.jsp" />
+        <st:include value="/generals/css-js-Bootstrap.jsp"/>
+        <st:include value="/generals/css-js-Chosen.jsp"/>
+        <st:include value="/generals/css-js-app.jsp"/>
+        <st:include value="/generals/css-js-Icheck.jsp"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      
-           <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
-        
-   
+
+        <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="/VendorCMS/home/js/register/css/register.css">
+
+        <script src="/VendorCMS/scriptRegister.js" type="text/javascript"></script>   
+
+
         <title>Sign Up Vendor Masonry Store</title>
-
-        <!-- Font Icon -->
-        <link rel="stylesheet" href="/VendorCMS/home/js/register/fonts/material-icon/css/material-design-iconic-font.min.css">
-
-        <!-- Main css -->
-        <link rel="stylesheet" href="/VendorCMS/home/js/register/css/style.css">
-        <title>Create a vendor account</title>
     </head>
     <body>
-    <st:form id="frm" name="frm" action="register" method="post" cssClass="form-horizontal">
-        <div class="main">
+        <st:hidden id="permiso" name="permiso" value="%{permiso}" />
+        <st:hidden id="mensaje" name="mensaje" value="%{mensaje}" />
+        <st:hidden id="mensajes" name="mensajes" value="%{mensajes}" />
 
-            <section class="signup">
-                <!-- <img src="images/signup-bg.jpg" alt=""> -->
-                <div class="container">
-                    <div class="signup-content">
-                        <form method="POST" id="signup-form" class="signup-form">
-                            <h2 class="form-title">Create account</h2>
-                            <div class="form-group">
-                                <input type="text" class="form-input" name="name" id="name" placeholder="Your Name"/>
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-input" name="email" id="email" placeholder="Your Email"/>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-input" name="password" id="password" placeholder="Password"/>
-                                <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-input" name="re_password" id="re_password" placeholder="Repeat your password"/>
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                                <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
-                            </div>
-                            <div class="form-group">
-                                <input type="submit" name="submit" id="submit" class="form-submit" value="Sign up"/>
-                            </div>
-                        </form>
-                        <p class="loginhere">
-                            Have already an account ? <a href="/VendorCMS/intro.jsp" class="loginhere-link">Login here</a>
-                        </p>
+        <st:form id="frm" name="frm" action="register" method="post" cssClass="form-group">
+            <st:hidden id="accion" name="accion" value="%{accion}"/>
+            <st:hidden id="idEdit" name="idEdit" value="%{idEdit}"/>
+
+            <div class="container-fluid">
+
+                <div class="container login_customized">
+                    <h2 class="titles-h2">  Register Vendor Account</h2>
+                    <!--makes a linear view of inputs-->
+                    <br>
+
+                    <div class="row">                           
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="companyName">Company Name</label>                             
+                            <st:textfield label="Company Name" name="companyName" id="companyName" class="form-control" value="%{companyName}" placeholder="Company name..."/>                   
+                        </div>                              
                     </div>
+
+                    <!--closes first row-->
+
+                    <div class="row">
+
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="name"> Contact Name</label>
+                            <st:textfield  name="name" id="name" class="form-control" value="%{name}" placeholder="Name of contact..."/>
+                        </div>
+
+
+                        <div class=" col-sm-6 col-xs-12 form-group">
+                            <label for="phoneNumber"> Phone Number (format: xxx-xxx-xxxx)</label>
+                            <st:textfield  name="phoneNumber" id="phoneNumber" class="form-control" value="%{phoneNumber}" placeholder="Phone Number" pattern="^\d{3}-\d{3}-\d{4}$"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="webSite">Website</label>
+                            <st:textfield  name="webSite" id="webSite" class="form-control" value="%{webSite}" placeholder="Input your website..." />
+                        </div>
+                        <div class="col-sm-6 col-xs-12 form-group" style="overflow: visible !important;">
+                            <label for="city">City</label>
+                            <st:select class="form-control"  id="city" name="city" value="%{city}" list="citiesRegister" listKey="description" listValue="description" />
+
+                        </div>
+                    </div>   
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12 form-group">
+
+
+                            <label for="email">Email</label>
+                            <st:textfield  name="email" id="email" class="form-control" value="%{email}"  onmouseout="enableEmail2();" placeholder="Email..."/>  
+                        </div>
+                        <div class="col-sm-6 col-xs-12 form-group ">
+                            <label for="pwd">Repeat Email</label>
+                            <st:textfield  name="email2" id="email2" class="form-control" value="%{email2}"   onmouseout="validateEmail();" placeholder="Email verification..."/>  
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="password">Password</label>
+                            <st:password  name="password" id="password" class="form-control"  value="%{password}" placeholder="Password..."/> 
+                        </div>
+                        <div class="col-sm-6 col-xs-12 form-group">
+                            <label for="password2">Repeat password</label>
+                            <st:password  name="password2" id="password2" class="form-control"  value="%{password2}" placeholder="Password verification..."/>
+
+                        </div>
+                    </div>
+
+
+                    <div class="wrap_button">
+                        <button type="submit" class="btn btn-warning newb" onclick="saveRequest();"><strong>Register Now</strong></button>
+                    </div>
+
+                    <div class="btn-group pull-right">       
+
+                        <a class="btn btn-warning modifi pull-right"  href="/VendorCMS/intro.jsp" >
+                            <i class="glyphicon glyphicon-log-in"></i>&nbsp;Go to login page </a>
+                    </div>
+
+
                 </div>
-            </section>
-
-        </div>
+            </div>
 
 
-        <div style="text-align: left; color:#e6e6e6;">
-            <st:fielderror />
-            <st:actionerror />
-            <st:actionmessage />            
-        </div>
-    </st:form> 
-   <st:include value="/generals/css-js-Jquery.jsp"/>
-        </body>
+
+            <div style="text-align: left; color:#e6e6e6;">
+                <st:fielderror />
+                <st:actionerror />
+                <st:actionmessage />            
+            </div>
+        </st:form> 
+
+    </body>
 </html>

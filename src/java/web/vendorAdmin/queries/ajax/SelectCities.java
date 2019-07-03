@@ -49,7 +49,7 @@ public class SelectCities extends ActionSupport implements SessionAware {
  
 
     public void setProvince(String province) {
-        this.province = province;
+        this.province = "Ontario";
     }
 
  

@@ -19,8 +19,8 @@ and open the template in the editor.
     <listener>
         <listener-class>web.session.ORMCargar</listener-class>
     </listener>
-    <!--<listener>
-        <listener-class>web.ciclos.ListaDeCiclos</listener-class>
+<!--    <listener>
+        <listener-class>web.Cycle.ListOfCycles</listener-class>
     </listener>
     <listener>
         <listener-class>web.sesion.SAP</listener-class>
