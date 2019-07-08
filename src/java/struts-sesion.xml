@@ -23,7 +23,9 @@ and open the template in the editor.
             <result name="input">/register.jsp</result>
             <result name="success">/register.jsp</result>                  
         </action>
-        
+        <action name="logOut" class="web.session.LogOut">
+            <result>/intro.jsp</result>
+        </action>
         <action name="home" class="web.home.Home">
             <result>/home/main.jsp</result>
         </action>

@@ -11,10 +11,11 @@
 <!DOCTYPE html>
 <html class="fondoRegister">
     <head>
+        <st:include value="/generals/css-js-Jquery.jsp"/>
         <st:include value="/generals/css-js-Head.jsp" />
-        <st:include value="/generals/css-js-Bootstrap.jsp"/>
-        <st:include value="/generals/css-js-Chosen.jsp"/>
+        <st:include value="/generals/css-js-Bootstrap.jsp"/>  
         <st:include value="/generals/css-js-app.jsp"/>
+        <st:include value="/generals/css-js-Chosen.jsp"/>
         <st:include value="/generals/css-js-Icheck.jsp"/>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,13 +30,14 @@
         <title>Sign Up Vendor Masonry Store</title>
     </head>
     <body>
-        <st:hidden id="permiso" name="permiso" value="%{permiso}" />
-        <st:hidden id="mensaje" name="mensaje" value="%{mensaje}" />
-        <st:hidden id="mensajes" name="mensajes" value="%{mensajes}" />
+
 
         <st:form id="frm" name="frm" action="register" method="post" cssClass="form-group">
             <st:hidden id="accion" name="accion" value="%{accion}"/>
             <st:hidden id="idEdit" name="idEdit" value="%{idEdit}"/>
+            <st:hidden id="permiso" name="permiso" value="%{permiso}" />
+            <st:hidden id="mensaje" name="mensaje" value="%{mensaje}" />
+            <st:hidden id="mensajes" name="mensajes" value="%{mensajes}" />
 
             <div class="container-fluid">
 
@@ -82,11 +84,11 @@
 
 
                             <label for="email">Email</label>
-                            <st:textfield  name="email" id="email" class="form-control" value="%{email}"  onmouseout="enableEmail2();" placeholder="Email..."/>  
+                            <st:textfield  name="email" id="email" class="form-control" value="%{email}" placeholder="Email..."/>  
                         </div>
                         <div class="col-sm-6 col-xs-12 form-group ">
                             <label for="pwd">Repeat Email</label>
-                            <st:textfield  name="email2" id="email2" class="form-control" value="%{email2}"   onmouseout="validateEmail();" placeholder="Email verification..."/>  
+                            <st:textfield  name="email2" id="email2" class="form-control" value="%{email2}"   placeholder="Email verification..."/>  
                         </div>
                     </div>
                     <div class="row">
@@ -100,29 +102,45 @@
 
                         </div>
                     </div>
-
-
-                    <div class="wrap_button">
-                        <button type="submit" class="btn btn-warning newb" onclick="saveRequest();"><strong>Register Now</strong></button>
+                    <div class="row">
+                        <a class="btn btn-warning newb center-block"  onclick="saveRequest();" > <strong> Register Now </strong></a>
                     </div>
+
+                    <!--                    <div class="wrap_button">
+                                            <button type="submit" class="btn btn-warning newb" onclick="saveRequest();"><strong>Register Now</strong></button>
+                                        </div>-->
 
                     <div class="btn-group pull-right">       
 
                         <a class="btn btn-warning modifi pull-right"  href="/VendorCMS/intro.jsp" >
                             <i class="glyphicon glyphicon-log-in"></i>&nbsp;Go to login page </a>
                     </div>
+                    <div style="text-align: left; color:#e6e6e6;">
+                        <st:fielderror />
+                        <st:actionerror />
+                        <st:actionmessage />            
+                    </div>
+
+                </div>
 
 
+                <div class="modal" id="modalProcess">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title"><i class="glyphicon glyphicon-folder-open"></i>Vendor CMS</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Processing, Please wait...<i class="glyphicon glyphicon-repeat fast-right-spinner"></i></h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
 
 
-            <div style="text-align: left; color:#e6e6e6;">
-                <st:fielderror />
-                <st:actionerror />
-                <st:actionmessage />            
-            </div>
+
         </st:form> 
 
     </body>

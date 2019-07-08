@@ -145,7 +145,7 @@ display: -webkit-inline-box;
   
   </div>
      <div class="container  f1">
-        <span class="text-muted f2">Copyright 2019 Tradyfy</span>
+        <span class="text-muted f2">Copyright 2019 Tradefy</span>
         <div class="f3">
          <img class="img-responsive vlogos" src='/VendorCMS/home/img/mastercard.png'>
           <img class="img-responsive vlogos" src='/VendorCMS/home/img/paypal.png'>

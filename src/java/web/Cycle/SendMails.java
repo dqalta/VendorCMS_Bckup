@@ -43,7 +43,7 @@ public class SendMails implements Job, SessionAware {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                String email="";
+                String email = "";
                 //  ArrayList<AdmDtoCorreosPendientes> arr = new ArrayList<>();
                 // arr = AdmConsultas.getCorreosPendientes(o2c);
                 // System.out.println("Cantidad "+arr.size());
@@ -97,11 +97,15 @@ public class SendMails implements Job, SessionAware {
             HtmlEmail mail = new HtmlEmail();
 
 //             (587 or 2587) 
-            mail.setSmtpPort(2587);
+            //mail.setSSLOnConnect(true);
+      
+            mail.setSmtpPort(587);
             mail.setStartTLSEnabled(true);
-            mail.setHostName("email-smtp.us-east-1.amazonaws.com");
-   
+            mail.setHostName("email-smtp.us-east-1.amazonaws.com");           
+        //    mail.setHostName("smtp.mail.us-east-1.awsapps.com");
+
             mail.setAuthentication("AKIA5IWSWKB4PUTALS66", "BM8bBcvVe7gnt60WvejtducQ6lPlI5uCuaaXTXDTn8OR");
+            //mail.setAuthentication("no-reply", "lar@22Qh21");
 
             mail.addHeader("X-Priority", "1");
 
@@ -110,9 +114,11 @@ public class SendMails implements Job, SessionAware {
             //  for (int i = 0; i < correos.length; i++) {
             //      correo.addTo(correos[i]);
             //  }
+              System.out.println(email);
             mail.addTo(email);
 
-            mail.setFrom("no-reply@masonryorderdesk.ca", "Masonry");
+             mail.setFrom("no-reply@masonryorderdesk.ca", "Masonry");
+           // mail.setFrom("no-reply@masonryorderdesk.awsapps.com", "Masonry");
             // correo.setSubject(obj.getAsunto());
             mail.setSubject("Prueba");
             mail.setCharset("UTF-8");

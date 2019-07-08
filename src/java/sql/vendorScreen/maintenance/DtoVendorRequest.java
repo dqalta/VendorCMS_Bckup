@@ -18,7 +18,7 @@ public class DtoVendorRequest implements Serializable {
 
     private int id;
     private String companyName;
-    private String name;
+    private String vname;
     private String phoneNumber;
     private String webSite;
     private String city;
@@ -48,13 +48,13 @@ public class DtoVendorRequest implements Serializable {
     }
 
    
-    public String getName() {
-        return name;
+    public String getVName() {
+        return vname;
     }
 
    
-    public void setName(String name) {
-        this.name = name;
+    public void setVName(String vname) {
+        this.vname = vname;
     }
 
     public String getPhoneNumber() {

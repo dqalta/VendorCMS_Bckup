@@ -21,14 +21,14 @@ $(document).ready(function () {
 });
 
 if (permiso === "true") {
-    scroll();
+    //scroll();
 
     $("#city").chosen({width: "100%"});
 
 }
 
 function saveRequest() {
-    $("#ModalProcesando").modal({backdrop: 'static', keyboard: false});
+    $("#modalProcess").modal({backdrop: 'static', keyboard: false});
     $("#accion").val(1);
     $("#frm").submit();
 }

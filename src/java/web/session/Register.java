@@ -69,7 +69,7 @@ public class Register extends ActionSupport implements SessionAware {
     //register vars vars
     private String id;
     private String companyName;
-    private String name;
+    private String vname;
     private String phoneNumber;
     private String webSite;
     private String email;
@@ -176,12 +176,12 @@ public class Register extends ActionSupport implements SessionAware {
         this.companyName = companyName;
     }
 
-    public String getName() {
-        return name;
+    public String getVName() {
+        return vname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String vname) {
+        this.vname = vname;
     }
 
     public String getPhoneNumber() {
@@ -232,21 +232,44 @@ public class Register extends ActionSupport implements SessionAware {
         this.citiesRegister = citiesRegister;
     }
 
+    public String getEmail2() {
+        return email2;
+    }
+
+    public void setEmail2(String email2) {
+        this.email2 = email2;
+    }
+
+    public String getIdEdit() {
+        return idEdit;
+    }
+
+    public void setIdEdit(String idEdit) {
+        this.idEdit = idEdit;
+    }
+
+    public String getPassword2() {
+        return password2;
+    }
+
+    public void setPassword2(String password2) {
+        this.password2 = password2;
+    }
+
     ////////
     @Override
     public String execute() { //the class start here
-      
-       if (permiso == true) {
-           process();       
-           vdk.close();//Cerrar la conexión de la base de datos SIEMPRE
-       }else{
-         permiso=true;
-       }
+
+        if (permiso == true) {
+            process();
+            vdk.close();//Cerrar la conexión de la base de datos SIEMPRE
+        } else {
+            permiso = true;
+        }
         return SUCCESS;
     }
 
     //METODOS ADICIONALES
-    
     public void process() {
         switch (accion) {
             case 1: {
@@ -258,9 +281,10 @@ public class Register extends ActionSupport implements SessionAware {
 
     }
 
-    public void validateMail() {
+    public void validateMail(String address) {
+      
         SendMails send = new SendMails();
-        send.sendMail(email);
+        send.sendMail(address);
 
     }
 
@@ -271,20 +295,31 @@ public class Register extends ActionSupport implements SessionAware {
         //VALIDAR QUE CAMPOS NO SEAN BLANCOS NI NULOS
         if ((companyName == null) || (companyName.isEmpty())) {
             mensajes = mensajes + "danger<>Error<>Please complete field 'Name of Company'.|";
+            mensaje = true;
             flag = false;
         }
-        if ((name == null) || (name.isEmpty())) {
-            mensajes = mensajes + "danger<>Error<>Please complete field 'Name of Company'.|";
+        if ((vname == null) || (vname.isEmpty())) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'Name of Contact'.|";
+            mensaje = true;
             flag = false;
         }
-
+ if ((webSite == null) || (webSite.isEmpty())) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'WebSite'.|";
+            mensaje = true;
+            flag = false;
+        }
+  if ((phoneNumber == null) || (phoneNumber.isEmpty())) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'Phone Number'.|";
+            mensaje = true;
+            flag = false;
+        }
         Pattern pattern = Pattern.compile("^(.+)@(.+)$");
 
         Matcher mather = pattern.matcher(email);
         if (!mather.find()) {
             mensajes = mensajes + "danger<>Error<>The Email hasn't a valid text format.|";
-            flag = false;
             mensaje = true;
+            flag = false;
 
         }
         Pattern pattern2 = Pattern.compile("^(.+)@(.+)$");
@@ -292,24 +327,36 @@ public class Register extends ActionSupport implements SessionAware {
         Matcher mather2 = pattern2.matcher(email2);
         if (!mather2.find()) {
             mensajes = mensajes + "danger<>Error<>The Email of validation hasn't a valid text format.|";
-            flag = false;
             mensaje = true;
+            flag = false;
 
         }
         if ((!(email.equals(email2))) || (email2.isEmpty())) {
             mensajes = mensajes + "danger<>Error<>You provided two differents email address or must complete the form .|";
-            flag = false;
             mensaje = true;
+            flag = false;
+
+        }
+         if ((password == null) || (password.isEmpty())) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'Password'.|";
+            mensaje = true;
+            flag = false;
+        }
+         if ((password2 == null) || (password2.isEmpty())) {
+            mensajes = mensajes + "danger<>Error<>Please complete field 'Verification Password'.|";
+            mensaje = true;
+            flag = false;
         }
         if (!(password.equals(password2))) {
             mensajes = mensajes + "danger<>Error<>You provided two differents passwords .|";
-            flag = false;
             mensaje = true;
+            flag = false;
+
         }
 
-        if (!flag) {
-            mensaje = flag;
-        }
+//        if (!flag) {
+//            mensaje = flag;
+//        }
 
         return flag;
     }
@@ -323,16 +370,18 @@ public class Register extends ActionSupport implements SessionAware {
         citiesRegister = CombosMaintenance.getCitiesRegister(vdk);
 
     }
-   public class samp extends HttpServlet
-{
+
+    public class samp extends HttpServlet {
+
         public void doGet(HttpServletRequest request, HttpServletResponse response)
                 throws IOException, ServletException {
             response.setContentType("text/html");
-           
-                response.sendRedirect("login.jsp");
-           
+
+            response.sendRedirect("login.jsp");
+
         }
     }
+
     public void insert() {
         if (validateFields()) {//Valido los campos del formulario
             Transaction tn = null;//Inicializo la transacción de la BD en null
@@ -342,7 +391,7 @@ public class Register extends ActionSupport implements SessionAware {
                 DtoVendorRequest m = new DtoVendorRequest();//Creo un objeto del tipo style
 
                 m.setCompanyName(companyName);
-                m.setName(name); //should be vname in vendors table
+                m.setVName(vname); //should be vname in vendors table
                 m.setPhoneNumber(phoneNumber); //contact1
                 m.setWebSite(webSite); //contact2
                 m.setCity(city); //address1
@@ -350,16 +399,15 @@ public class Register extends ActionSupport implements SessionAware {
                 m.setPassword(password); //vendorUser
 
                 AdminSQL.saveVendorTemp(vdk, m);
-                
+
                 //  AdminSQL.incrementConsecutive(mdk, "codeVendor");
                 //AdmConsultas.bitacora(o2c, usuario, "Encargado guardado Tipo: " + tipo + ", Codigo: " + codigo);
                 tn.commit();// Hago Commit a la transacción para guardar el registro
                 //existVendor = true;
-                validateMail();
+                validateMail(email);
                 mensajes = mensajes + "info<>Information<>Account saved successfully.";
                 mensaje = true;
                 accion = 5;
-              
 
             } catch (HibernateException x) {
                 //AdmConsultas.error(o2c, x.getMessage());
@@ -372,48 +420,6 @@ public class Register extends ActionSupport implements SessionAware {
             }
             mensaje = true;
         }
-    }
-
-    /**
-     * @return the email2
-     */
-    public String getEmail2() {
-        return email2;
-    }
-
-    /**
-     * @param email2 the email2 to set
-     */
-    public void setEmail2(String email2) {
-        this.email2 = email2;
-    }
-
-    /**
-     * @return the idEdit
-     */
-    public String getIdEdit() {
-        return idEdit;
-    }
-
-    /**
-     * @param idEdit the idEdit to set
-     */
-    public void setIdEdit(String idEdit) {
-        this.idEdit = idEdit;
-    }
-
-    /**
-     * @return the password2
-     */
-    public String getPassword2() {
-        return password2;
-    }
-
-    /**
-     * @param password2 the password2 to set
-     */
-    public void setPassword2(String password2) {
-        this.password2 = password2;
     }
 
 }

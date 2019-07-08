@@ -114,6 +114,33 @@ public class AdminSQL {
         }
         return m;
     }
+        public static DtoVendorUser getUserLogin(Session vdk, String user) {
+        Iterator itr = vdk.createNativeQuery("SELECT"
+                + " id,"
+                + " codeVendorUser,"
+                + " nickName,"
+                + " fullName,"
+                + " email,"
+                + " passwordVendorUser,"
+                + " idVendor,"
+                + " created,"
+                + " createdBy,"
+                + " modified,"
+                + " modifiedBy,"
+                + " active,"
+                + " statusVendorUser"
+                + " FROM vendorUser"
+                + " WHERE (codeVendorUser = :user)"
+                + " OR (email = :user)")
+                .setParameter("user", user)
+                .setResultTransformer(Transformers.aliasToBean(DtoVendorUser.class))
+                .list().iterator();
+        DtoVendorUser m = null;
+        while (itr.hasNext()) {
+            m = (DtoVendorUser) itr.next();
+        }
+        return m;
+    }
 
     public static ArrayList<DtoVendorUser> getUsers(Session vdk) {
         ArrayList<DtoVendorUser> a = new ArrayList<>();
@@ -290,11 +317,11 @@ public class AdminSQL {
     }
          public static void saveVendorTemp(Session vdk, DtoVendorRequest m) {
         vdk.createNativeQuery("INSERT INTO vendorRegister"
-                + " (companyName, name, phoneNumber, webSite, city, email, password)"
+                + " (companyName, vname, phoneNumber, webSite, city, email, password)"
                 + " VALUES"
-                + " (:companyName, :name, :phoneNumber, :webSite, :city, :email, :password)")
+                + " (:companyName, :vname, :phoneNumber, :webSite, :city, :email, :password)")
                 .setParameter("companyName", m.getCompanyName())
-                .setParameter("name", m.getName())
+                .setParameter("vname", m.getVName())
                 .setParameter("phoneNumber", m.getPhoneNumber())
                 .setParameter("webSite", m.getWebSite())
                 .setParameter("city", m.getCity())

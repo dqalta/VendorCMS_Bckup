@@ -12,10 +12,11 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <st:include value="/generals/css-js-Jquery.jsp"/>
         <st:include value="/generals/css-js-Head.jsp" />
         <st:include value="/generals/css-js-Bootstrap.jsp"/>
         <st:include value="/generals/css-js-app.jsp"/>
-        <st:include value="/generals/css-js-Jquery.jsp"/>
+
         <link rel="icon" type="image/png" href="/VendorCMS/home/img/favicon.ico" />
 
 
@@ -27,6 +28,7 @@
             <st:include value="/generals/navApps.jsp" /> 
             <st:include value="/generals/mainmenu.jsp" >
                 <st:param name="title">HOME VENDOR</st:param>
+                <st:set var="userName">${param.userName}</st:set>
             </st:include>
             <st:include value="/generals/navBarFooter2.jsp" /> 
 

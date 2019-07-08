@@ -7,16 +7,17 @@ package web.session;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
-import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.interceptor.SessionAware;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
-import web.Cycle.SendMails;
-import web.Cycle.AmazonMail;
+import org.hibernate.Transaction;
+import sql.vendorScreen.admin.AdminSQL;
+import sql.vendorScreen.admin.DtoVendorUser;
 
 /**
  *
@@ -28,10 +29,17 @@ public class Login extends ActionSupport implements SessionAware {
     HttpServletRequest request;
     Map session;
     Session cms;
-    //CAMPOS - html
-    boolean parametros = true;//PARAMETROS VALIDOS
-    String usuario, contrasena;
-    //VARIABLES - uso en clase
+    //validates htmlfields
+    boolean parametros = true;//IF THE PARAMETERS ARE WORKING ACCORDING THE VALIDATION PROCESS
+
+    //vars usend in the login form
+    String vendorUser; //BRINGS THE USER CODE or EMAIL OR VENDOR CODE FROM  LOGIN
+    String vendorPassword; //BRINGS THE PASSWORD 
+
+    //vars who whill be stored in the session
+    String vendorUserName; //WILL BE HANDLING THE VENDOR'S NAME
+    String idVendor; //WILL BE HANDLING THE VENDOR'S ID
+    //VARS, USE IN THE CLASS
     String nombre;
     String mensajes = "";
     boolean mensaje;
@@ -41,11 +49,16 @@ public class Login extends ActionSupport implements SessionAware {
 
     //SET
     @Override
-
     public void setSession(Map session) {
         this.session = session;
     }
 
+    //GET
+    public Map getSession() {
+        return session;
+    }
+
+    ///custom
     public String getMensajes() {
         return mensajes;
     }
@@ -62,21 +75,36 @@ public class Login extends ActionSupport implements SessionAware {
         this.mensaje = mensaje;
     }
 
-    public void setUsuario(String usuario) {
-        this.usuario = StringUtils.trimToEmpty(usuario).toUpperCase();
+    public void setVendorUser(String vendorUser) {
+        this.vendorUser = StringUtils.trimToEmpty(vendorUser).toUpperCase();
     }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = StringUtils.trimToEmpty(contrasena);
+    public String getVendorUser() {
+        return this.vendorUser;
     }
 
-    //GET
-    public Map getSession() {
-        return session;
+    public void setVendorPassword(String vendorPassword) {
+        this.vendorPassword = StringUtils.trimToEmpty(vendorPassword);
     }
 
-    public String getUsuario() {
-        return this.usuario;
+    public String getVendorPassword() {
+        return vendorPassword;
+    }
+
+    public void setVendorUserName(String vendorUserName) {
+        this.vendorUserName = StringUtils.trimToEmpty(vendorUserName);
+    }
+
+    public String getVendorUserName() {
+        return vendorUserName;
+    }
+
+    public void setIdVendor(String idVendor) {
+        this.idVendor = idVendor;
+    }
+
+    public String getIdVendor() {
+        return idVendor;
     }
 
     @Override
@@ -89,54 +117,91 @@ public class Login extends ActionSupport implements SessionAware {
     public void validate() {
         //REQUEST
         request = ServletActionContext.getRequest();
+
         //VALIDAR QUE CAMPOS NO SEAN BLANCOS NI NULOS
-        /* if ((usuario == null) || (usuario.isEmpty() == true)) {
-            addFieldError("usuario", "Complete \"Usuario\".");
+        if ((vendorUser == null) || (vendorUser.isEmpty() == true)) {
+            mensajes = mensajes + "danger<>Error<> Vendor code, email or vendor user code must be input";
+            mensaje = true;
+            //   addFieldError("vendorUser", "Complete \"User\".");
             parametros = false;
         }
-        if ((contrasena == null) || (contrasena.isEmpty() == true)) {
-            addFieldError("contrasena", "Complete \"Contrase\u00f1a\".");
+        if ((vendorPassword == null) || (vendorPassword.isEmpty() == true)) {
+            // addFieldError("vendorPassword", "Complete \"Password\".");
+            mensajes = mensajes + "danger<>Error<> Vendor password must be input";
+            mensaje = true;
             parametros = false;
         }
-        if (parametros == true) {*/
-        try {
 
-            session = ActionContext.getContext().getSession();
+        if (parametros == true) {
+            try {
 
-            cms = ORMUtil.getSesionCMS().openSession();
+                session = ActionContext.getContext().getSession();
 
-            usuario = getResultado(cms);
+                cms = ORMUtil.getSesionCMS().openSession();
 
-            System.out.println("Resultado de BD: " + usuario);
-
-            session = ActionContext.getContext().getSession();
-            session.put("en-sesion", "true");
-            session.put("user", "Daniel");
-            session.put("userName", "Danielito");
-            session.put("idVendor", "HDE-001");
-            session.put("ip", request.getRemoteHost());
+                boolean access = false;
+                access = getAccount(cms, vendorUser, vendorPassword);
+                if (access) {
+                    //   System.out.println("Resultado de BD: " + vendorUser);
+                    session = ActionContext.getContext().getSession();
+                    session.put("en-sesion", "true");
+                    session.put("user", vendorUser);
+                    session.put("userName", vendorUserName);
+                    session.put("idVendor", idVendor);
+                    session.put("ip", request.getRemoteHost());
 //            SendMails send = new SendMails();
 //            send.sendMail("dqalta@gmail.com");
 
-            //Lógica para pegar Base de Datos
-            /* }*/
-            cms.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            addActionError(e.getMessage());
+                    //Lógica para pegar Base de Datos
+                    /* }*/
+                    cms.close();
+                } else {
+                    mensajes = mensajes + "danger<>Error<> Vendor account doesn't active or doesn't exist: " + vendorUser;
+                    mensaje = true;
 
+                    addActionError("");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                addActionError(e.getMessage());
+            }
         }
     }
 
-    public static String getResultado(Session cms) {
-        String valor = "-1";
-        Iterator itr = cms.createSQLQuery("SELECT id as valor"
-                + " FROM member")
-                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list().iterator();
-        while (itr.hasNext()) {
-            valor = String.valueOf(((Map) itr.next()).get("valor"));
+    public boolean getAccount(Session cms, String user, String password) {
+        Boolean flag = false;
+        Transaction tn = null;
+        try {
+            tn = cms.beginTransaction();
+
+            DtoVendorUser p = AdminSQL.getUserLogin(cms, user);
+
+            if (p != null) {
+                if (p.getPasswordVendorUser().equals(password)) {
+                    vendorUserName = p.getFullName();
+                    idVendor = p.getIdVendor();
+                    flag = true;
+                } else {
+                    mensajes = mensajes + "danger<>Error<> The password is not valid for the user: " + user;
+                    mensaje = true;
+                    addActionError("");
+                    flag = false;
+                }
+            } else {
+                mensajes = mensajes + "danger<>Error<> User is not valid. Check again.";
+                mensaje = true;
+                addActionError("");
+                flag = false;
+            }
+        } catch (HibernateException x) {
+            mensajes = mensajes + "danger<>Error<> Vendor account doesn't active or doesn't exist: " + user + ": " + ExceptionUtils.getMessage(x) + ".";
+            mensaje = true;
+            if (tn != null) {
+                tn.rollback();
+            }
+
         }
-        return valor;
+        return flag;
     }
 
 }
